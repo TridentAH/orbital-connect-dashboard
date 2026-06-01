@@ -1,13 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Orbital Connect</title>
+  <title>Orbital Connect Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+  </style>
 </head>
 <body>
 
 <h1>Orbital Connect Dashboard</h1>
 
-<p>If you can see this page, GitHub Pages is working.</p>
+<div id="patients">
+Loading patients...
+</div>
+
+<script>
+
+async function loadPatients() {
+
+  const response = await fetch(
+    "https://oomjzfqecnkshvfgmjqb.supabase.co/functions/v1/get-dashboard-data"
+  );
+
+  const patients = await response.json();
+
+  const container =
+    document.getElementById("patients");
+
+  container.innerHTML = "";
+
+  patients.forEach(patient => {
+
+    container.innerHTML += `
+      <div class="card">
+
+        <h2>
+          ${patient.patient_first_name}
+          ${patient.patient_last_name}
+        </h2>
+
+        <p>
+          <b>Condition:</b>
+          ${patient.condition}
+        </p>
+
+        <p>
+          <b>Physician:</b>
+          ${patient.physician_name}
+        </p>
+
+        <p>
+          <b>Priority Score:</b>
+          ${patient.priority_score}
+        </p>
+
+        <p>
+          <b>Flags:</b>
+          ${patient.flag_summary}
+        </p>
+
+        <p>
+          <b>Latest Summary:</b><br>
+          ${patient.latest_summary}
+        </p>
+
+        <button onclick="callPatient(${patient.patient_id})">
+          Call Patient
+        </button>
+
+      </div>
+    `;
+  });
+
+}
+
+async function callPatient(patientId) {
+
+  const response = await fetch(
+    "https://oomjzfqecnkshvfgmjqb.supabase.co/functions/v1/start-batch-call?patient_id=" +
+    patientId
+  );
+
+  if (response.ok) {
+    alert("Call Started");
+  }
+  else {
+    alert("Call Failed");
+  }
+
+}
+
+loadPatients();
+
+</script>
 
 </body>
 </html>
