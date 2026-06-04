@@ -171,6 +171,45 @@
       .detail-grid-3, .behavioral-grid { grid-template-columns: 1fr 1fr; }
       .stats-bar { grid-template-columns: repeat(3, 1fr); }
     }
+
+  .collapsible-section {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+  background: var(--surface2);
+  transition: background 0.15s;
+}
+
+.collapsible-header:hover { background: var(--border); }
+
+.section-chevron {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+
+.section-chevron.open { transform: rotate(180deg); }
+
+.collapsible-body {
+  display: none;
+  padding: 14px;
+}
+
+.collapsible-body.open { display: block; }
+    
   </style>
 </head>
 <body>
@@ -676,6 +715,13 @@ loadPatients();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
+}
+
+  function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector(".section-chevron");
+  body.classList.toggle("open");
+  chevron.classList.toggle("open");
 }
 </script>
 </body>
