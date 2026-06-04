@@ -121,7 +121,7 @@
 
     .outcome-logged { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--green); margin-bottom: 16px; }
 
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
     .btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
     .btn-primary { background: var(--accent); color: white; }
     .btn-primary:hover { background: #1648c8; }
@@ -358,7 +358,7 @@ function renderCallHistory(history) {
           </div>
         </div>
         <div class="call-history-summary">${call.call_summary || 'No summary available'}</div>
-        ${call.red_flags_detected ? `<div style="color:var(--red);font-size:11px;margin-top:6px;font-family:monospace">🚨 ${call.red_flags_detected}</div>` : ''}
+        ${call.red_flags_detected ? `<div style="color:var(--red);font-size:11px;margin-top:6px;font-family:monospace"> ${call.red_flags_detected}</div>` : ''}
         ${call.yellow_flags_detected ? `<div style="color:var(--yellow);font-size:11px;margin-top:6px;font-family:monospace">⚠️ ${call.yellow_flags_detected}</div>` : ''}
       </div>`;
   }).join('');
@@ -452,7 +452,7 @@ function renderPatients(patients) {
       </div>
       <div class="card-body">
         <div class="divider"></div>
-        ${hasRedFlags ? `<div class="flags-box">🚨 ${patient.flag_summary}</div>` : ""}
+        ${hasRedFlags ? `<div class="flags-box"> ${patient.flag_summary}</div>` : ""}
         ${hasYellowFlags ? `<div class="flags-box yellow">⚠️ ${patient.flag_summary}</div>` : ""}
         ${noAnswerHtml}
         ${outcomeHtml}
@@ -498,7 +498,7 @@ function renderPatients(patients) {
 
         <div class="section-divider">Actions</div>
         <div class="actions">
-  <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">📞 Call Patient Now</button>
+  <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Patient Now</button>
   <button class="btn btn-outline" onclick="toggleForm(this, 'outcome-form')">Log Call Outcome</button>
   <button class="btn btn-outline" onclick="toggleForm(this, 'edit-form')">Edit Patient Info</button>
   <button class="btn btn-danger" onclick="toggleForm(this, 'delete-form')">Remove Patient from BVC</button>
