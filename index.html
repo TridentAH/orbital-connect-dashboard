@@ -438,11 +438,11 @@ function renderPatients(patients) {
 
         <div class="section-divider">Actions</div>
         <div class="actions">
-          <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">📞 Call Patient</button>
-          <button class="btn btn-outline" onclick="toggleForm(this, 'outcome-form')">Log Outcome</button>
-          <button class="btn btn-outline" onclick="toggleForm(this, 'edit-form')">✏️ Edit</button>
-          <button class="btn btn-danger" onclick="toggleForm(this, 'delete-form')">🗑 Remove</button>
-        </div>
+  <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">📞 Call Patient Now</button>
+  <button class="btn btn-outline" onclick="toggleForm(this, 'outcome-form')">Log Call Outcome</button>
+  <button class="btn btn-outline" onclick="toggleForm(this, 'edit-form')">Edit Patient Info</button>
+  <button class="btn btn-danger" onclick="toggleForm(this, 'delete-form')">Remove Patient from BVC</button>
+</div>
 
         <div class="outcome-form">
           <h4>Log Outcome</h4>
