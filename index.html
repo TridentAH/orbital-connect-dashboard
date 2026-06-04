@@ -33,68 +33,24 @@
       --green-border: #1a4d1e;
     }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text-primary);
-      min-height: 100vh;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
 
-    header {
-      background: #010409;
-      color: white;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
-    }
-
+    header { background: #010409; color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
     .logo { display: flex; align-items: center; gap: 10px; }
-
-    .logo-dot {
-      width: 10px;
-      height: 10px;
-      background: #3b82f6;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
+    .logo-dot { width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .logo-text { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; color: var(--text-primary); }
     .logo-sub { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; letter-spacing: 0.5px; }
-
     .header-right { display: flex; align-items: center; gap: 10px; }
-
-    .btn-header {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
+    .btn-header { background: var(--surface2); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
     .btn-header:hover { background: var(--border); }
     .btn-header.primary { background: var(--accent); border-color: var(--accent); color: white; }
     .btn-header.primary:hover { background: #1648c8; }
-
     .last-updated { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
 
     main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
 
     .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-
     .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
     .stat-number { font-size: 24px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
     .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -113,12 +69,13 @@
     .card-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
     .patient-info { flex: 1; }
     .patient-name { font-size: 16px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }
-    .patient-meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; }
+    .patient-meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; }
 
     .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
     .badge.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
     .badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
     .badge.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge.neutral { background: var(--surface2); color: var(--text-secondary); border: 1px solid var(--border); }
     .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
     .card-body { padding: 0 20px 16px; display: none; }
@@ -126,6 +83,7 @@
     .divider { height: 1px; background: var(--border); margin-bottom: 16px; }
 
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .detail-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 2px; }
     .detail-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
 
@@ -134,134 +92,67 @@
     .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--red); margin-bottom: 16px; font-family: 'DM Mono', monospace; }
     .flags-box.yellow { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
 
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .section-divider { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin: 16px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
+    .clinical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .clinical-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; }
+    .clinical-key { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 2px; }
+    .clinical-value { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+    .clinical-value.true { color: var(--yellow); }
+    .clinical-value.false { color: var(--green); }
+    .clinical-value.urgent { color: var(--red); }
+    .clinical-value.monitor { color: var(--yellow); }
+    .clinical-value.stable { color: var(--green); }
+
+    .behavioral-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+    .behavioral-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; text-align: center; }
+    .behavioral-value { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+    .behavioral-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-top: 2px; }
+
+    .outcome-logged { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--green); margin-bottom: 16px; }
+
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
     .btn-primary { background: var(--accent); color: white; }
     .btn-primary:hover { background: #1648c8; }
     .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
     .btn-outline:hover { background: var(--surface2); }
-    .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red-border); }
-    .btn-danger:hover { background: var(--red-bg); }
 
     .outcome-form { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; display: none; }
     .outcome-form.open { display: block; }
     .outcome-form h4 { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
 
-    select, textarea, input[type="text"], input[type="tel"], input[type="date"] {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--surface);
-      margin-bottom: 8px;
-      color: var(--text-primary);
-    }
-
+    select, textarea, input[type="text"], input[type="tel"], input[type="date"] { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--surface); margin-bottom: 8px; color: var(--text-primary); }
     .outcome-submit { background: #16a34a; color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
 
     .loading { text-align: center; padding: 60px 20px; color: var(--text-secondary); font-size: 14px; }
     .empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); font-size: 14px; }
-
     .chevron { font-size: 12px; color: var(--text-secondary); transition: transform 0.2s; }
     .chevron.open { transform: rotate(180deg); }
 
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      width: 100%;
-      max-width: 480px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .modal-title { font-size: 16px; font-weight: 600; }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .modal-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
-    }
-
-    .modal-tab {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.15s;
-    }
-
-    .modal-tab.active {
-      background: var(--accent);
-      color: white;
-    }
-
+    .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; padding: 4px; }
+    .modal-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .modal-tab { background: none; border: none; color: var(--text-secondary); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+    .modal-tab.active { background: var(--accent); color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-
     .form-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-group { margin-bottom: 12px; }
-
-    .csv-upload-area {
-      border: 2px dashed var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 12px;
-    }
-
+    .csv-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 12px; }
     .csv-upload-area:hover { border-color: var(--accent); }
     .csv-upload-area p { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
-
     .csv-template { font-size: 11px; color: var(--accent); cursor: pointer; text-decoration: underline; margin-bottom: 12px; display: block; }
-
     .form-submit { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px; }
     .form-submit:hover { background: #1648c8; }
 
     @media (max-width: 600px) {
-      .detail-grid { grid-template-columns: 1fr; }
+      .detail-grid, .clinical-grid { grid-template-columns: 1fr; }
+      .detail-grid-3, .behavioral-grid { grid-template-columns: 1fr 1fr; }
       .stats-bar { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
@@ -285,20 +176,10 @@
 
 <main>
   <div class="stats-bar">
-    <div class="stat red">
-      <div class="stat-number" id="countRed">—</div>
-      <div class="stat-label">Urgent</div>
-    </div>
-    <div class="stat yellow">
-      <div class="stat-number" id="countYellow">—</div>
-      <div class="stat-label">Monitor</div>
-    </div>
-    <div class="stat green">
-      <div class="stat-number" id="countGreen">—</div>
-      <div class="stat-label">Stable</div>
-    </div>
+    <div class="stat red"><div class="stat-number" id="countRed">—</div><div class="stat-label">Urgent</div></div>
+    <div class="stat yellow"><div class="stat-number" id="countYellow">—</div><div class="stat-label">Monitor</div></div>
+    <div class="stat green"><div class="stat-number" id="countGreen">—</div><div class="stat-label">Stable</div></div>
   </div>
-
   <div class="section-title">Patient Priority Queue</div>
   <div id="patients"><div class="loading">Loading patients...</div></div>
 </main>
@@ -310,26 +191,14 @@
       <span class="modal-title">Add Patient</span>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-
     <div class="modal-tabs">
       <button class="modal-tab active" onclick="switchTab('single', this)">Single Patient</button>
       <button class="modal-tab" onclick="switchTab('bulk', this)">Bulk CSV Upload</button>
     </div>
-
-    <!-- Single Patient Form -->
     <div class="tab-content active" id="tab-single">
-      <div class="form-group">
-        <label class="form-label">First Name</label>
-        <input type="text" id="firstName" placeholder="e.g. Margaret">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Last Name</label>
-        <input type="text" id="lastName" placeholder="e.g. Johnson">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone Number</label>
-        <input type="tel" id="phoneNumber" placeholder="+14805551234">
-      </div>
+      <div class="form-group"><label class="form-label">First Name</label><input type="text" id="firstName" placeholder="e.g. Margaret"></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input type="text" id="lastName" placeholder="e.g. Johnson"></div>
+      <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="phoneNumber" placeholder="+14805551234"></div>
       <div class="form-group">
         <label class="form-label">Condition</label>
         <select id="condition">
@@ -342,18 +211,10 @@
           <option value="Other">Other</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">Physician</label>
-        <input type="text" id="physicianName" placeholder="e.g. Dr. Abels">
-      </div>
-      <div class="form-group">
-        <label class="form-label">First Call Date</label>
-        <input type="date" id="firstCallDate">
-      </div>
+      <div class="form-group"><label class="form-label">Physician</label><input type="text" id="physicianName" placeholder="e.g. Dr. Abels"></div>
+      <div class="form-group"><label class="form-label">First Call Date</label><input type="date" id="firstCallDate"></div>
       <button class="form-submit" onclick="addSinglePatient()">Add Patient</button>
     </div>
-
-    <!-- Bulk CSV Upload -->
     <div class="tab-content" id="tab-bulk">
       <span class="csv-template" onclick="downloadTemplate()">⬇ Download CSV Template</span>
       <div class="csv-upload-area" onclick="document.getElementById('csvFile').click()">
@@ -371,6 +232,92 @@
 <script>
 const SUPABASE_URL = "https://oomjzfqecnkshvfgmjqb.supabase.co";
 let csvPatients = [];
+
+function formatClinicalValue(key, value) {
+  if (value === null || value === undefined) return '<span style="color:var(--text-secondary)">—</span>';
+  if (typeof value === 'boolean') {
+    return `<span class="clinical-value ${value}">${value ? 'Yes' : 'No'}</span>`;
+  }
+  if (key === 'overall_clinical_impression') {
+    return `<span class="clinical-value ${value}">${value}</span>`;
+  }
+  return `<span class="clinical-value">${value}</span>`;
+}
+
+function renderClinicalData(structured) {
+  if (!structured) return '<div class="summary-box" style="color:var(--text-secondary)">No clinical extraction yet</div>';
+  
+  const fields = [
+    { key: 'chest_pain', label: 'Chest Pain' },
+    { key: 'shortness_of_breath', label: 'Shortness of Breath' },
+    { key: 'shortness_of_breath_severity', label: 'SOB Severity' },
+    { key: 'shortness_of_breath_at_rest', label: 'SOB at Rest' },
+    { key: 'swelling', label: 'Swelling' },
+    { key: 'swelling_location', label: 'Swelling Location' },
+    { key: 'weight_stable', label: 'Weight Stable' },
+    { key: 'weight_change_lbs', label: 'Weight Change' },
+    { key: 'medication_adherence', label: 'Meds Adherence' },
+    { key: 'medication_concerns', label: 'Med Concerns' },
+    { key: 'energy_level', label: 'Energy Level' },
+    { key: 'dizziness', label: 'Dizziness' },
+    { key: 'er_visit_since_last_call', label: 'ER Visit' },
+    { key: 'overall_clinical_impression', label: 'Impression' },
+  ];
+
+  const html = fields.map(f => `
+    <div class="clinical-item">
+      <div class="clinical-key">${f.label}</div>
+      <div>${formatClinicalValue(f.key, structured[f.key])}</div>
+    </div>
+  `).join('');
+
+  const concerns = structured.additional_concerns;
+  const concernsHtml = concerns ? `
+    <div class="summary-box" style="margin-top:8px">
+      <div class="detail-label" style="margin-bottom:4px">Additional Concerns</div>
+      ${concerns}
+    </div>
+  ` : '';
+
+  return `<div class="clinical-grid">${html}</div>${concernsHtml}`;
+}
+
+function renderBehavioralData(behavioral) {
+  if (!behavioral) return '<div class="summary-box" style="color:var(--text-secondary)">No audio analysis yet</div>';
+  
+  const sentimentColor = behavioral.overall_sentiment === 'negative' ? 'var(--red)' : 
+                         behavioral.overall_sentiment === 'positive' ? 'var(--green)' : 
+                         'var(--text-secondary)';
+
+  return `
+    <div class="behavioral-grid">
+      <div class="behavioral-item">
+        <div class="behavioral-value" style="color:${sentimentColor}">${behavioral.overall_sentiment || '—'}</div>
+        <div class="behavioral-label">Sentiment</div>
+      </div>
+      <div class="behavioral-item">
+        <div class="behavioral-value">${behavioral.words_per_minute || '—'}</div>
+        <div class="behavioral-label">Words/Min</div>
+      </div>
+      <div class="behavioral-item">
+        <div class="behavioral-value">${behavioral.hesitation_count ?? '—'}</div>
+        <div class="behavioral-label">Hesitations</div>
+      </div>
+      <div class="behavioral-item">
+        <div class="behavioral-value">${behavioral.positive_sentiment_pct ?? '—'}%</div>
+        <div class="behavioral-label">Positive</div>
+      </div>
+      <div class="behavioral-item">
+        <div class="behavioral-value">${behavioral.negative_sentiment_pct ?? '—'}%</div>
+        <div class="behavioral-label">Negative</div>
+      </div>
+      <div class="behavioral-item">
+        <div class="behavioral-value">${behavioral.audio_duration_seconds ? Math.round(behavioral.audio_duration_seconds / 60) + 'm' : '—'}</div>
+        <div class="behavioral-label">Duration</div>
+      </div>
+    </div>
+  `;
+}
 
 async function loadPatients() {
   try {
@@ -401,6 +348,20 @@ async function loadPatients() {
       const hasRedFlags = patient.flag_summary && patient.flag_summary !== "No flags" && status === "red";
       const hasYellowFlags = patient.flag_summary && patient.flag_summary !== "No flags" && status === "yellow";
 
+      const structured = patient.structured_data ? 
+        (typeof patient.structured_data === 'string' ? JSON.parse(patient.structured_data) : patient.structured_data) : null;
+      
+      const behavioral = patient.behavioral_data ?
+        (typeof patient.behavioral_data === 'string' ? JSON.parse(patient.behavioral_data) : patient.behavioral_data) : null;
+
+      const outcomeHtml = patient.outcome_status ? `
+        <div class="outcome-logged">
+          ✅ Outcome logged: <strong>${patient.outcome_status}</strong>
+          ${patient.outcome_notes ? ` — ${patient.outcome_notes}` : ''}
+          ${patient.outcome_logged_by ? ` (by ${patient.outcome_logged_by})` : ''}
+        </div>
+      ` : '';
+
       const card = document.createElement("div");
       card.className = `patient-card ${status}`;
       card.innerHTML = `
@@ -411,13 +372,12 @@ async function loadPatients() {
               <span>${patient.condition}</span>
               <span>${patient.physician_name}</span>
               ${patient.last_call_date ? `<span>Last call: ${patient.last_call_date}</span>` : "<span>No calls yet</span>"}
+              ${patient.next_call_date ? `<span>Next call: ${patient.next_call_date}</span>` : ""}
+              ${patient.call_number > 0 ? `<span>${patient.call_number} call${patient.call_number !== 1 ? 's' : ''}</span>` : ""}
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge ${status}">
-              <span class="badge-dot"></span>
-              ${statusLabel}
-            </span>
+            <span class="badge ${status}"><span class="badge-dot"></span>${statusLabel}</span>
             <span class="chevron">▼</span>
           </div>
         </div>
@@ -425,18 +385,32 @@ async function loadPatients() {
           <div class="divider"></div>
           ${hasRedFlags ? `<div class="flags-box">🚨 ${patient.flag_summary}</div>` : ""}
           ${hasYellowFlags ? `<div class="flags-box yellow">⚠️ ${patient.flag_summary}</div>` : ""}
-          <div class="detail-grid">
-            <div class="detail-item">
+          ${outcomeHtml}
+
+          <div class="detail-grid-3">
+            <div>
               <div class="detail-label">Priority Score</div>
               <div class="detail-value">${patient.priority_score}/10</div>
             </div>
-            <div class="detail-item">
+            <div>
               <div class="detail-label">Condition</div>
               <div class="detail-value">${patient.condition}</div>
             </div>
+            <div>
+              <div class="detail-label">Total Calls</div>
+              <div class="detail-value">${patient.call_number || 0}</div>
+            </div>
           </div>
+
           <div class="detail-label" style="margin-bottom:6px">Latest Call Summary</div>
           <div class="summary-box">${patient.latest_summary || "No calls yet"}</div>
+
+          <div class="section-divider">Clinical Extraction</div>
+          ${renderClinicalData(structured)}
+
+          <div class="section-divider">Behavioral Analysis</div>
+          ${renderBehavioralData(behavioral)}
+
           <div class="actions">
             <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">📞 Call Patient</button>
             <button class="btn btn-outline" onclick="toggleOutcome(this)">Log Outcome</button>
@@ -480,11 +454,8 @@ function toggleOutcome(btn) {
 
 async function callPatient(patientId) {
   const res = await fetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
-  if (res.ok) {
-    alert("✅ Call started successfully");
-  } else {
-    alert("❌ Call failed — check connection");
-  }
+  if (res.ok) { alert("✅ Call started successfully"); } 
+  else { alert("❌ Call failed — check connection"); }
 }
 
 async function logOutcome(btn, patientId) {
@@ -493,10 +464,7 @@ async function logOutcome(btn, patientId) {
   const notes = form.querySelector(".outcome-notes").value;
   const loggedBy = form.querySelector(".outcome-logged-by").value;
 
-  if (!status) {
-    alert("Please select an outcome");
-    return;
-  }
+  if (!status) { alert("Please select an outcome"); return; }
 
   const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
     method: "POST",
@@ -510,27 +478,13 @@ async function logOutcome(btn, patientId) {
     })
   });
 
-  if (res.ok) {
-    alert("✅ Outcome logged");
-    form.classList.remove("open");
-    loadPatients();
-  } else {
-    alert("❌ Failed to log outcome");
-  }
+  if (res.ok) { alert("✅ Outcome logged"); form.classList.remove("open"); loadPatients(); }
+  else { alert("❌ Failed to log outcome"); }
 }
 
-function openModal() {
-  document.getElementById("modalOverlay").classList.add("open");
-}
-
-function closeModal() {
-  document.getElementById("modalOverlay").classList.remove("open");
-  clearForm();
-}
-
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById("modalOverlay")) closeModal();
-}
+function openModal() { document.getElementById("modalOverlay").classList.add("open"); }
+function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); clearForm(); }
+function handleOverlayClick(e) { if (e.target === document.getElementById("modalOverlay")) closeModal(); }
 
 function clearForm() {
   document.getElementById("firstName").value = "";
@@ -601,20 +555,17 @@ function downloadTemplate() {
 function handleCSVUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = (e) => {
     const text = e.target.result;
     const lines = text.trim().split("\n");
     const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
-
     csvPatients = lines.slice(1).map(line => {
       const values = line.split(",").map(v => v.trim());
       const obj = {};
       headers.forEach((h, i) => obj[h] = values[i] || "");
       return obj;
     }).filter(p => p.patient_first_name || p.first_name);
-
     document.getElementById("csvPreview").textContent = `✅ ${csvPatients.length} patients ready to import`;
     document.getElementById("csvSubmit").style.display = "block";
   };
@@ -622,17 +573,12 @@ function handleCSVUpload(event) {
 }
 
 async function uploadCSV() {
-  if (!csvPatients.length) {
-    alert("No patients to import");
-    return;
-  }
-
+  if (!csvPatients.length) { alert("No patients to import"); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ type: "bulk", patients: csvPatients })
   });
-
   if (res.ok) {
     const data = await res.json();
     alert(`✅ ${data.patients_added} patients imported successfully`);
