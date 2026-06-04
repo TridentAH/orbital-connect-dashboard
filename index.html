@@ -427,14 +427,35 @@ function renderPatients(patients) {
         <div class="detail-label" style="margin-bottom:6px">Latest Call Summary</div>
         <div class="summary-box">${patient.latest_summary || "No calls yet"}</div>
 
-        <div class="section-divider">Clinical Extraction</div>
-        ${renderClinicalData(structured)}
+        <div class="collapsible-section">
+  <div class="collapsible-header" onclick="toggleSection(this)">
+    <span>Clinical Extraction</span>
+    <span class="section-chevron">▼</span>
+  </div>
+  <div class="collapsible-body">
+    ${renderClinicalData(structured)}
+  </div>
+</div>
 
-        <div class="section-divider">Behavioral Analysis</div>
-        ${renderBehavioralData(behavioral)}
+<div class="collapsible-section">
+  <div class="collapsible-header" onclick="toggleSection(this)">
+    <span>Behavioral Analysis</span>
+    <span class="section-chevron">▼</span>
+  </div>
+  <div class="collapsible-body">
+    ${renderBehavioralData(behavioral)}
+  </div>
+</div>
 
-        <div class="section-divider">Call History</div>
-        ${renderCallHistory(patient.call_history)}
+<div class="collapsible-section">
+  <div class="collapsible-header" onclick="toggleSection(this)">
+    <span>Call History</span>
+    <span class="section-chevron">▼</span>
+  </div>
+  <div class="collapsible-body">
+    ${renderCallHistory(patient.call_history)}
+  </div>
+</div>
 
         <div class="section-divider">Actions</div>
         <div class="actions">
