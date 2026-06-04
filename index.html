@@ -12,371 +12,258 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --surface2: #1c2128;
-  --border: #30363d;
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --accent: #1a56db;
-  --red: #f85149;
-  --red-bg: #2d1214;
-  --red-border: #6e1a1a;
-  --yellow: #e3b341;
-  --yellow-bg: #2d2000;
-  --yellow-border: #6e5000;
-  --green: #3fb950;
-  --green-bg: #0d1f0f;
-  --green-border: #1a4d1e;
-}
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --accent: #1a56db;
+      --red: #f85149;
+      --red-bg: #2d1214;
+      --red-border: #6e1a1a;
+      --yellow: #e3b341;
+      --yellow-bg: #2d2000;
+      --yellow-border: #6e5000;
+      --green: #3fb950;
+      --green-bg: #0d1f0f;
+      --green-border: #1a4d1e;
+    }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text-primary);
-  min-height: 100vh;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
 
-header {
-  background: #010409;
-  color: white;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid var(--border);
-}
+    header {
+      background: #010409;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+    .logo { display: flex; align-items: center; gap: 10px; }
 
-.logo-dot {
-  width: 10px;
-  height: 10px;
-  background: #3b82f6;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
+    .logo-dot {
+      width: 10px;
+      height: 10px;
+      background: #3b82f6;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
 
-.logo-text {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  color: var(--text-primary);
-}
+    .logo-text { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; color: var(--text-primary); }
+    .logo-sub { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; letter-spacing: 0.5px; }
 
-.logo-sub {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.5px;
-}
+    .header-right { display: flex; align-items: center; gap: 10px; }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    .btn-header {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-.refresh-btn {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+    .btn-header:hover { background: var(--border); }
+    .btn-header.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn-header.primary:hover { background: #1648c8; }
 
-.refresh-btn:hover { background: var(--border); }
+    .last-updated { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
 
-.last-updated {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-family: 'DM Mono', monospace;
-}
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
 
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
+    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
 
-.stats-bar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
+    .stat-number { font-size: 24px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat.red .stat-number { color: var(--red); }
+    .stat.yellow .stat-number { color: var(--yellow); }
+    .stat.green .stat-number { color: var(--green); }
 
-.stat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  text-align: center;
-}
+    .section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin-bottom: 12px; }
 
-.stat-number {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1;
-  margin-bottom: 4px;
-}
+    .patient-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: box-shadow 0.2s; }
+    .patient-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+    .patient-card.red { border-left: 4px solid var(--red); }
+    .patient-card.yellow { border-left: 4px solid var(--yellow); }
+    .patient-card.green { border-left: 4px solid var(--green); }
 
-.stat-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+    .card-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .patient-info { flex: 1; }
+    .patient-name { font-size: 16px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }
+    .patient-meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; }
 
-.stat.red .stat-number { color: var(--red); }
-.stat.yellow .stat-number { color: var(--yellow); }
-.stat.green .stat-number { color: var(--green); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .badge.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .badge.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-.section-title {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-}
+    .card-body { padding: 0 20px 16px; display: none; }
+    .card-body.open { display: block; }
+    .divider { height: 1px; background: var(--border); margin-bottom: 16px; }
 
-.patient-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
-  transition: box-shadow 0.2s;
-}
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 2px; }
+    .detail-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
 
-.patient-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+    .summary-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 16px; }
 
-.patient-card.red { border-left: 4px solid var(--red); }
-.patient-card.yellow { border-left: 4px solid var(--yellow); }
-.patient-card.green { border-left: 4px solid var(--green); }
+    .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--red); margin-bottom: 16px; font-family: 'DM Mono', monospace; }
+    .flags-box.yellow { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
 
-.card-header {
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-}
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-.patient-info { flex: 1; }
+    .btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: #1648c8; }
+    .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--surface2); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red-border); }
+    .btn-danger:hover { background: var(--red-bg); }
 
-.patient-name {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 3px;
-  color: var(--text-primary);
-}
+    .outcome-form { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; display: none; }
+    .outcome-form.open { display: block; }
+    .outcome-form h4 { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
 
-.patient-meta {
-  font-size: 12px;
-  color: var(--text-secondary);
-  display: flex;
-  gap: 12px;
-}
+    select, textarea, input[type="text"], input[type="tel"], input[type="date"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
+    .outcome-submit { background: #16a34a; color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
 
-.badge.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-.badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
-.badge.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .loading { text-align: center; padding: 60px 20px; color: var(--text-secondary); font-size: 14px; }
+    .empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); font-size: 14px; }
 
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .chevron { font-size: 12px; color: var(--text-secondary); transition: transform 0.2s; }
+    .chevron.open { transform: rotate(180deg); }
 
-.card-body {
-  padding: 0 20px 16px;
-  display: none;
-}
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-.card-body.open { display: block; }
+    .modal-overlay.open { display: flex; }
 
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin-bottom: 16px;
-}
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
 
-.detail-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
-  margin-bottom: 2px;
-}
+    .modal-title { font-size: 16px; font-weight: 600; }
 
-.detail-value {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+    }
 
-.summary-box {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-}
+    .modal-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
 
-.flags-box {
-  background: var(--red-bg);
-  border: 1px solid var(--red-border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12px;
-  color: var(--red);
-  margin-bottom: 16px;
-  font-family: 'DM Mono', monospace;
-}
+    .modal-tab {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
 
-.flags-box.yellow {
-  background: var(--yellow-bg);
-  border-color: var(--yellow-border);
-  color: var(--yellow);
-}
+    .modal-tab.active {
+      background: var(--accent);
+      color: white;
+    }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-.btn {
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  border: none;
-  transition: all 0.15s;
-}
+    .form-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group { margin-bottom: 12px; }
 
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
+    .csv-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
 
-.btn-primary:hover { background: #1648c8; }
+    .csv-upload-area:hover { border-color: var(--accent); }
+    .csv-upload-area p { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
 
-.btn-outline {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-}
+    .csv-template { font-size: 11px; color: var(--accent); cursor: pointer; text-decoration: underline; margin-bottom: 12px; display: block; }
 
-.btn-outline:hover { background: var(--surface2); }
+    .form-submit { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px; }
+    .form-submit:hover { background: #1648c8; }
 
-.outcome-form {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 14px;
-  margin-top: 12px;
-  display: none;
-}
-
-.outcome-form.open { display: block; }
-
-.outcome-form h4 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--text-primary);
-}
-
-select, textarea, input[type="text"] {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  background: var(--surface);
-  margin-bottom: 8px;
-  color: var(--text-primary);
-}
-
-.outcome-submit {
-  background: #16a34a;
-  color: white;
-  border: none;
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-}
-
-.loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.empty {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.chevron {
-  font-size: 12px;
-  color: var(--text-secondary);
-  transition: transform 0.2s;
-}
-
-.chevron.open { transform: rotate(180deg); }
-
-@media (max-width: 600px) {
-  .detail-grid { grid-template-columns: 1fr; }
-  .stats-bar { grid-template-columns: repeat(3, 1fr); }
-}
+    @media (max-width: 600px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -391,7 +278,8 @@ select, textarea, input[type="text"] {
   </div>
   <div class="header-right">
     <span class="last-updated" id="lastUpdated">—</span>
-    <button class="refresh-btn" onclick="loadPatients()">↻ Refresh</button>
+    <button class="btn-header" onclick="loadPatients()">↻ Refresh</button>
+    <button class="btn-header primary" onclick="openModal()">+ Add Patient</button>
   </div>
 </header>
 
@@ -415,30 +303,94 @@ select, textarea, input[type="text"] {
   <div id="patients"><div class="loading">Loading patients...</div></div>
 </main>
 
+<!-- Add Patient Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add Patient</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab('single', this)">Single Patient</button>
+      <button class="modal-tab" onclick="switchTab('bulk', this)">Bulk CSV Upload</button>
+    </div>
+
+    <!-- Single Patient Form -->
+    <div class="tab-content active" id="tab-single">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input type="text" id="firstName" placeholder="e.g. Margaret">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input type="text" id="lastName" placeholder="e.g. Johnson">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="+14805551234">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Condition</label>
+        <select id="condition">
+          <option value="">Select condition...</option>
+          <option value="CHF">CHF</option>
+          <option value="Diabetes">Diabetes</option>
+          <option value="COPD">COPD</option>
+          <option value="CKD">CKD</option>
+          <option value="Hypertension">Hypertension</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Physician</label>
+        <input type="text" id="physicianName" placeholder="e.g. Dr. Abels">
+      </div>
+      <div class="form-group">
+        <label class="form-label">First Call Date</label>
+        <input type="date" id="firstCallDate">
+      </div>
+      <button class="form-submit" onclick="addSinglePatient()">Add Patient</button>
+    </div>
+
+    <!-- Bulk CSV Upload -->
+    <div class="tab-content" id="tab-bulk">
+      <span class="csv-template" onclick="downloadTemplate()">⬇ Download CSV Template</span>
+      <div class="csv-upload-area" onclick="document.getElementById('csvFile').click()">
+        <div style="font-size: 24px">📄</div>
+        <p>Click to upload CSV file</p>
+        <p style="font-size: 11px; margin-top: 4px;">or drag and drop</p>
+        <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
+      </div>
+      <div id="csvPreview" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;"></div>
+      <button class="form-submit" onclick="uploadCSV()" id="csvSubmit" style="display:none">Import Patients</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL = "https://oomjzfqecnkshvfgmjqb.supabase.co";
+let csvPatients = [];
 
 async function loadPatients() {
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/get-dashboard-data`);
     const patients = await res.json();
-
     const container = document.getElementById("patients");
 
     if (!patients || patients.length === 0) {
-      container.innerHTML = '<div class="empty">No patients found.</div>';
+      container.innerHTML = '<div class="empty">No patients yet. Add your first patient using the button above.</div>';
+      document.getElementById("countRed").textContent = 0;
+      document.getElementById("countYellow").textContent = 0;
+      document.getElementById("countGreen").textContent = 0;
       return;
     }
 
-    // Sort by priority score descending
     patients.sort((a, b) => b.priority_score - a.priority_score);
 
-    // Update stats
     document.getElementById("countRed").textContent = patients.filter(p => p.priority_score >= 8).length;
     document.getElementById("countYellow").textContent = patients.filter(p => p.priority_score >= 3 && p.priority_score < 8).length;
     document.getElementById("countGreen").textContent = patients.filter(p => p.priority_score < 3).length;
-
-    // Update last updated
     document.getElementById("lastUpdated").textContent = new Date().toLocaleTimeString();
 
     container.innerHTML = "";
@@ -458,7 +410,7 @@ async function loadPatients() {
             <div class="patient-meta">
               <span>${patient.condition}</span>
               <span>${patient.physician_name}</span>
-              ${patient.last_call_date ? `<span>Last call: ${patient.last_call_date}</span>` : ""}
+              ${patient.last_call_date ? `<span>Last call: ${patient.last_call_date}</span>` : "<span>No calls yet</span>"}
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
@@ -527,9 +479,7 @@ function toggleOutcome(btn) {
 }
 
 async function callPatient(patientId) {
-  const res = await fetch(
-    `${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`
-  );
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
   if (res.ok) {
     alert("✅ Call started successfully");
   } else {
@@ -569,11 +519,134 @@ async function logOutcome(btn, patientId) {
   }
 }
 
-// Auto refresh every 60 seconds
+function openModal() {
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+  clearForm();
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModal();
+}
+
+function clearForm() {
+  document.getElementById("firstName").value = "";
+  document.getElementById("lastName").value = "";
+  document.getElementById("phoneNumber").value = "";
+  document.getElementById("condition").value = "";
+  document.getElementById("physicianName").value = "";
+  document.getElementById("firstCallDate").value = "";
+  document.getElementById("csvPreview").textContent = "";
+  document.getElementById("csvSubmit").style.display = "none";
+  csvPatients = [];
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById(`tab-${tab}`).classList.add("active");
+}
+
+async function addSinglePatient() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const condition = document.getElementById("condition").value;
+  const physician = document.getElementById("physicianName").value.trim();
+  const callDate = document.getElementById("firstCallDate").value;
+
+  if (!firstName || !lastName || !phone || !condition || !physician) {
+    alert("Please fill in all required fields");
+    return;
+  }
+
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "single",
+      patient_first_name: firstName,
+      patient_last_name: lastName,
+      phone_number: phone,
+      condition,
+      physician_name: physician,
+      next_call_date: callDate || null
+    })
+  });
+
+  if (res.ok) {
+    alert(`✅ ${firstName} ${lastName} added successfully`);
+    closeModal();
+    loadPatients();
+  } else {
+    const err = await res.json();
+    alert("❌ Failed to add patient: " + (err.error || "Unknown error"));
+  }
+}
+
+function downloadTemplate() {
+  const csv = "patient_first_name,patient_last_name,phone_number,condition,physician_name,next_call_date\nMargaret,Johnson,+14805551234,CHF,Dr. Abels,2026-07-01\n";
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "orbital_patient_template.csv";
+  a.click();
+}
+
+function handleCSVUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const lines = text.trim().split("\n");
+    const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+
+    csvPatients = lines.slice(1).map(line => {
+      const values = line.split(",").map(v => v.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = values[i] || "");
+      return obj;
+    }).filter(p => p.patient_first_name || p.first_name);
+
+    document.getElementById("csvPreview").textContent = `✅ ${csvPatients.length} patients ready to import`;
+    document.getElementById("csvSubmit").style.display = "block";
+  };
+  reader.readAsText(file);
+}
+
+async function uploadCSV() {
+  if (!csvPatients.length) {
+    alert("No patients to import");
+    return;
+  }
+
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "bulk", patients: csvPatients })
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    alert(`✅ ${data.patients_added} patients imported successfully`);
+    closeModal();
+    loadPatients();
+  } else {
+    const err = await res.json();
+    alert("❌ Import failed: " + (err.error || "Unknown error"));
+  }
+}
+
 setInterval(loadPatients, 60000);
 loadPatients();
 
-// Register service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
