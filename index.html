@@ -209,6 +209,28 @@
 }
 
 .collapsible-body.open { display: block; }
+
+    .avc-notification {
+  background: #1a2a4a;
+  border: 1px solid #1a56db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #6b9fff;
+  margin-bottom: 12px;
+}
+
+.avc-badge {
+  background: var(--accent);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
     
   </style>
 </head>
@@ -743,6 +765,42 @@ if ("serviceWorker" in navigator) {
   body.classList.toggle("open");
   chevron.classList.toggle("open");
 }
+
+  async function scheduleAvc(patientId, btn) {
+  if (btn.textContent.includes("Scheduled")) {
+    alert("After Visit Call is already scheduled for this patient.");
+    return;
+  }
+
+  const today = new Date();
+  const callDate = new Date(today.setDate(today.getDate() + 2))
+    .toISOString()
+    .split("T")[0];
+
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: {
+        avc_scheduled: true,
+        next_call_date: callDate
+      }
+    })
+  });
+
+  if (res.ok) {
+    alert(`✅ After Visit Call scheduled for ${callDate}`);
+    btn.textContent = "After Visit Call Scheduled ✓";
+    btn.style.color = "var(--green)";
+    btn.style.borderColor = "var(--green-border)";
+    loadPatients();
+  } else {
+    alert("❌ Failed to schedule After Visit Call");
+  }
+}
+  
 </script>
 </body>
 </html>
