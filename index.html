@@ -532,9 +532,15 @@ function renderPatients(patients) {
         ${patient.latest_avc_date ? `Call date: ${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}` : ""}
       </div>
     ` : '<div class="summary-box" style="color:var(--text-secondary)">No After Visit Care calls yet</div>'}
-    <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, this)" style="width:100%">
-      ${patient.avc_scheduled ? "After Visit Call Scheduled ✓" : "Schedule After Visit Call"}
-    </button>
+    ${patient.avc_scheduled && patient.next_call_date ? `
+  <div style="margin-bottom:8px">
+    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">AVC Scheduled</div>
+    <input type="date" class="avc-date-picker" value="${patient.next_call_date}" onchange="updateAvcDate(${patient.patient_id}, this.value)" style="margin-bottom:8px">
+    <button class="btn btn-danger" onclick="cancelAvc(${patient.patient_id})" style="width:100%">Cancel After Visit Call</button>
+  </div>
+` : `
+  <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, this)" style="width:100%">Schedule After Visit Call</button>
+`}
   </div>
 </div>
 
@@ -791,6 +797,45 @@ async function scheduleAvc(patientId, btn) {
   }
 }
 
+  async function updateAvcDate(patientId, newDate) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: { next_call_date: newDate }
+    })
+  });
+  if (res.ok) {
+    alert(`✅ AVC call rescheduled to ${newDate}`);
+    loadPatients();
+  } else {
+    alert("❌ Failed to update date");
+  }
+}
+
+async function cancelAvc(patientId) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: {
+        avc_scheduled: false,
+        next_call_date: null
+      }
+    })
+  });
+  if (res.ok) {
+    alert("✅ After Visit Call cancelled");
+    loadPatients();
+  } else {
+    alert("❌ Failed to cancel");
+  }
+}
+  
 setInterval(loadPatients, 60000);
 loadPatients();
 
