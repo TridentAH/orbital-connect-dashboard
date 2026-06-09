@@ -496,8 +496,28 @@ function renderPatients(patients) {
   </div>
 </div>
 
-        <div class="section-divider">Actions</div>
-        <div class="actions">
+        ${patient.avc_unread ? `<div class="avc-notification">📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}</strong></div>` : ""}
+
+<div class="collapsible-section">
+  <div class="collapsible-header" onclick="toggleSection(this)">
+    <span>After Visit Care ${patient.avc_unread ? '<span class="avc-badge">NEW</span>' : ""}</span>
+    <span class="section-chevron">▼</span>
+  </div>
+  <div class="collapsible-body">
+    ${patient.latest_avc_summary ? `
+      <div class="summary-box">${patient.latest_avc_summary}</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:12px">
+        ${patient.latest_avc_date ? `Call date: ${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}` : ""}
+      </div>
+    ` : '<div class="summary-box" style="color:var(--text-secondary)">No After Visit Care calls yet</div>'}
+    <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, this)" style="width:100%">
+      ${patient.avc_scheduled ? "After Visit Call Scheduled ✓" : "Schedule After Visit Call"}
+    </button>
+  </div>
+</div>
+
+<div class="section-divider">Actions</div>
+<div class="actions">
   <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Patient Now</button>
   <button class="btn btn-outline" onclick="toggleForm(this, 'outcome-form')">Log Call Outcome</button>
   <button class="btn btn-outline" onclick="toggleForm(this, 'edit-form')">Edit Patient Info</button>
