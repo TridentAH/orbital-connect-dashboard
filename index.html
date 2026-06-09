@@ -752,31 +752,22 @@ async function uploadCSV() {
   else { const err = await res.json(); alert("❌ Import failed: " + (err.error || "Unknown error")); }
 }
 
-setInterval(loadPatients, 60000);
-loadPatients();
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-
-  function toggleSection(header) {
+function toggleSection(header) {
   const body = header.nextElementSibling;
   const chevron = header.querySelector(".section-chevron");
   body.classList.toggle("open");
   chevron.classList.toggle("open");
 }
 
-  async function scheduleAvc(patientId, btn) {
+async function scheduleAvc(patientId, btn) {
   if (btn.textContent.includes("Scheduled")) {
     alert("After Visit Call is already scheduled for this patient.");
     return;
   }
-
   const today = new Date();
   const callDate = new Date(today.setDate(today.getDate() + 2))
     .toISOString()
     .split("T")[0];
-
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -789,7 +780,6 @@ if ("serviceWorker" in navigator) {
       }
     })
   });
-
   if (res.ok) {
     alert(`✅ After Visit Call scheduled for ${callDate}`);
     btn.textContent = "After Visit Call Scheduled ✓";
@@ -800,7 +790,13 @@ if ("serviceWorker" in navigator) {
     alert("❌ Failed to schedule After Visit Call");
   }
 }
-  
+
+setInterval(loadPatients, 60000);
+loadPatients();
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
 </script>
 </body>
 </html>
