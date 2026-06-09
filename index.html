@@ -535,7 +535,10 @@ function renderPatients(patients) {
     ${patient.avc_scheduled && patient.next_call_date ? `
   <div style="margin-bottom:8px">
     <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">AVC Scheduled</div>
-    <input type="date" class="avc-date-picker" value="${patient.next_call_date}" onchange="updateAvcDate(${patient.patient_id}, this.value)" style="margin-bottom:8px">
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+  <input type="date" class="avc-date-picker" value="${patient.next_call_date}" onchange="updateAvcDate(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
+  <input type="time" class="avc-time-picker" value="${patient.preferred_call_time || '10:00'}" onchange="updateAvcTime(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
+</div>
     <button class="btn btn-danger" onclick="cancelAvc(${patient.patient_id})" style="width:100%">Cancel After Visit Call</button>
   </div>
 ` : `
@@ -836,6 +839,45 @@ async function cancelAvc(patientId) {
   }
 }
   
+async function cancelAvc(patientId) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: {
+        avc_scheduled: false,
+        next_call_date: null
+      }
+    })
+  });
+  if (res.ok) {
+    alert("✅ After Visit Call cancelled");
+    loadPatients();
+  } else {
+    alert("❌ Failed to cancel");
+  }
+}
+
+async function updateAvcTime(patientId, newTime) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: { preferred_call_time: newTime }
+    })
+  });
+  if (res.ok) {
+    alert(`✅ Call time updated to ${newTime}`);
+    loadPatients();
+  } else {
+    alert("❌ Failed to update time");
+  }
+}
+
 setInterval(loadPatients, 60000);
 loadPatients();
 
