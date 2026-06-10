@@ -635,16 +635,19 @@ function renderPatients(patients) {
 
     const outcomeHtml = patient.outcome_status ? `<div class="outcome-logged">✅ Outcome: <strong>${patient.outcome_status}</strong>${patient.outcome_notes ? ` — ${patient.outcome_notes}` : ''}${patient.outcome_logged_by ? ` (${patient.outcome_logged_by})` : ''}</div>` : '';
 
-    // AVC section — show only if unread OR scheduled
+    // AVC section — show if unread summary OR AVC scheduled
     const showAvc = patient.avc_unread || (patient.avc_scheduled && patient.avc_next_call_date);
     const avcHtml = showAvc ? `
       ${patient.avc_unread ? `<div class="avc-notification">
-        <span>After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
+        <span>📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
         ${patient.latest_avc_call_id ? `<button class="btn btn-sm btn-outline" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : ''}
+      </div>` : ''}
+      ${patient.avc_unread && patient.latest_avc_summary ? `<div class="avc-panel">
+        <div class="avc-panel-label">After Visit Care Summary</div>
+        <div class="summary-box">${patient.latest_avc_summary}</div>
       </div>` : ''}
       ${(patient.avc_scheduled && patient.avc_next_call_date) ? `<div class="avc-panel">
         <div class="avc-panel-label">AVC Scheduled</div>
-        ${patient.latest_avc_summary ? `<div class="summary-box" style="margin-bottom:8px">${patient.latest_avc_summary}</div>` : ''}
         <div class="date-time-row" style="margin-bottom:8px">
           <input type="date" value="${patient.avc_next_call_date||''}" onchange="updateAvcDate(${patient.patient_id},this.value)">
           <input type="time" value="${patient.avc_preferred_call_time||'10:00'}" onchange="updateAvcTime(${patient.patient_id},this.value)">
@@ -708,7 +711,7 @@ function renderPatients(patients) {
         <div class="actions-divider">Actions</div>
         <div class="actions">
           <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Now</button>
-          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">Call History</button>
+          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">📋 Call History</button>
           ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'edit-form')">Edit</button>
