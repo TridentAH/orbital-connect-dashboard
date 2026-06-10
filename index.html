@@ -18,10 +18,13 @@
       --bg: #0d1117;
       --surface: #161b22;
       --surface2: #1c2128;
+      --surface3: #21262d;
       --border: #30363d;
       --text-primary: #e6edf3;
       --text-secondary: #8b949e;
+      --text-tertiary: #6e7681;
       --accent: #1a56db;
+      --accent-hover: #1648c8;
       --red: #f85149;
       --red-bg: #2d1214;
       --red-border: #6e1a1a;
@@ -31,207 +34,351 @@
       --green: #3fb950;
       --green-bg: #0d1f0f;
       --green-border: #1a4d1e;
+      --blue-soft: #388bfd;
     }
 
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
 
-    header { background: #010409; color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+    /* ─── HEADER ─── */
+    header {
+      background: #010409;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
     .logo { display: flex; align-items: center; gap: 10px; }
-    .logo-dot { width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .logo-text { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; color: var(--text-primary); }
-    .logo-sub { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; letter-spacing: 0.5px; }
+    .logo-dot { width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .logo-text { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+    .logo-sub { font-size: 10px; color: var(--text-secondary); font-family: 'DM Mono', monospace; letter-spacing: 0.8px; text-transform: uppercase; }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .tab-btn {
+      padding: 6px 18px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-btn.active { background: var(--surface); color: var(--text-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .tab-btn:hover:not(.active) { color: var(--text-primary); }
+
     .header-right { display: flex; align-items: center; gap: 10px; }
-    .btn-header { background: var(--surface2); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
-    .btn-header:hover { background: var(--border); }
-    .btn-header.primary { background: var(--accent); border-color: var(--accent); color: white; }
-    .btn-header.primary:hover { background: #1648c8; }
     .last-updated { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
+    .btn-header { background: var(--surface2); border: 1px solid var(--border); color: var(--text-primary); padding: 7px 14px; border-radius: 7px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; }
+    .btn-header:hover { background: var(--surface3); }
+    .btn-header.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn-header.primary:hover { background: var(--accent-hover); }
 
-    main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+    /* ─── MAIN ─── */
+    main { max-width: 920px; margin: 0 auto; padding: 20px 16px; }
 
-    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
-    .stat-number { font-size: 24px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
-    .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    /* ─── VIEWS ─── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; }
+    .stat-number { font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 3px; }
+    .stat-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.6px; }
     .stat.red .stat-number { color: var(--red); }
     .stat.yellow .stat-number { color: var(--yellow); }
     .stat.green .stat-number { color: var(--green); }
 
-    .search-bar { margin-bottom: 16px; }
-    .search-input { width: 100%; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 13px; font-family: 'DM Sans', sans-serif; }
-    .search-input::placeholder { color: var(--text-secondary); }
+    /* ─── SEARCH ─── */
+    .search-row { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+    .search-input {
+      flex: 1;
+      padding: 9px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .search-input::placeholder { color: var(--text-tertiary); }
+    .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin-bottom: 10px; }
 
-    .section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin-bottom: 12px; }
+    /* ─── PATIENT CARD ─── */
+    .patient-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .patient-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.35); }
+    .patient-card.red { border-left: 3px solid var(--red); }
+    .patient-card.yellow { border-left: 3px solid var(--yellow); }
+    .patient-card.green { border-left: 3px solid var(--green); }
 
-    .patient-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: box-shadow 0.2s; }
-    .patient-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
-    .patient-card.red { border-left: 4px solid var(--red); }
-    .patient-card.yellow { border-left: 4px solid var(--yellow); }
-    .patient-card.green { border-left: 4px solid var(--green); }
+    .card-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .patient-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .patient-meta { font-size: 11px; color: var(--text-secondary); display: flex; gap: 10px; flex-wrap: wrap; }
 
-    .card-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-    .patient-info { flex: 1; }
-    .patient-name { font-size: 16px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }
-    .patient-meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
     .badge.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
     .badge.yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
     .badge.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-    .card-body { padding: 0 20px 16px; display: none; }
+    .chevron { font-size: 11px; color: var(--text-tertiary); transition: transform 0.2s; }
+    .chevron.open { transform: rotate(180deg); }
+
+    .card-body { padding: 0 18px 16px; display: none; }
     .card-body.open { display: block; }
-    .divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+    .card-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
 
-    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .detail-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 2px; }
-    .detail-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    /* ─── LATEST SUMMARY ─── */
+    .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 5px; }
+    .summary-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
 
-    .summary-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 16px; }
+    /* ─── FLAGS ─── */
+    .flags-box { border-radius: 7px; padding: 8px 12px; font-size: 11px; margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+    .flags-box.red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+    .flags-box.yellow { background: var(--yellow-bg); border: 1px solid var(--yellow-border); color: var(--yellow); }
 
-    .flags-box { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--red); margin-bottom: 16px; font-family: 'DM Mono', monospace; }
-    .flags-box.yellow { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
+    /* ─── COMPACT CLINICAL + BEHAVIORAL ─── */
+    .inline-data-section { margin-bottom: 12px; }
+    .inline-data-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 6px; }
+    .chips-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .chip.flag-red { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+    .chip.flag-yellow { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
+    .chip.flag-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+    .chip-key { font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; }
 
-    .no-answer-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+    .behavioral-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+    .beh-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; text-align: center; min-width: 60px; }
+    .beh-val { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .beh-key { font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-tertiary); margin-top: 1px; }
 
-    .section-divider { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); margin: 16px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    /* ─── CCM SCHEDULE ─── */
+    .section-block { margin-bottom: 12px; }
+    .section-block-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 6px; }
+    .date-time-row { display: flex; gap: 8px; }
+    .date-time-row input { flex: 1; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'DM Sans', sans-serif; background: var(--surface2); color: var(--text-primary); margin-bottom: 0; }
 
-    .clinical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-    .clinical-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; }
-    .clinical-key { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 2px; }
-    .clinical-value { font-size: 12px; font-weight: 500; color: var(--text-primary); }
-    .clinical-value.true { color: var(--yellow); }
-    .clinical-value.false { color: var(--green); }
-    .clinical-value.urgent { color: var(--red); }
-    .clinical-value.monitor { color: var(--yellow); }
-    .clinical-value.stable { color: var(--green); }
+    /* ─── AVC NOTIFICATION ─── */
+    .avc-notification {
+      background: #0d1f3a;
+      border: 1px solid #1a3a6e;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 12px;
+      color: #6b9fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .avc-badge {
+      background: var(--accent);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      letter-spacing: 0.5px;
+    }
+    .avc-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .avc-panel-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 8px; }
 
-    .behavioral-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-    .behavioral-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; text-align: center; }
-    .behavioral-value { font-size: 18px; font-weight: 600; color: var(--text-primary); }
-    .behavioral-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-top: 2px; }
-
-    .call-history-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
-    .call-history-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-    .call-history-date { font-size: 12px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
-    .call-history-summary { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
-
-    .outcome-logged { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--green); margin-bottom: 16px; }
-
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-    .btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
+    /* ─── BUTTON ROW ─── */
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .btn { padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-sm { padding: 5px 11px; font-size: 11px; }
     .btn-primary { background: var(--accent); color: white; }
-    .btn-primary:hover { background: #1648c8; }
+    .btn-primary:hover { background: var(--accent-hover); }
     .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
     .btn-outline:hover { background: var(--surface2); }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text-primary); }
     .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red-border); }
     .btn-danger:hover { background: var(--red-bg); }
 
-    .outcome-form, .edit-form, .delete-form { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; display: none; }
-    .outcome-form.open, .edit-form.open, .delete-form.open { display: block; }
-    .outcome-form h4, .edit-form h4, .delete-form h4 { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
-    .delete-form p { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
-    .delete-warning { color: var(--red); font-size: 12px; margin-bottom: 8px; }
+    /* ─── ACTIONS SECTION ─── */
+    .actions-divider { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); margin: 14px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    select, textarea, input[type="text"], input[type="tel"], input[type="date"] { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--surface); margin-bottom: 8px; color: var(--text-primary); }
-    .outcome-submit { background: #16a34a; color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-right: 8px; }
-    .edit-submit { background: var(--accent); color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-right: 8px; }
-    .delete-confirm-btn { background: var(--red); color: white; border: none; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+    /* ─── FORMS ─── */
+    .inline-form { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 10px; display: none; }
+    .inline-form.open { display: block; }
+    .inline-form h4 { font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
+    select, textarea, input[type="text"], input[type="tel"], input[type="date"], input[type="time"] {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      margin-bottom: 7px;
+      color: var(--text-primary);
+    }
+    .form-submit-green { background: #16a34a; color: white; border: none; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-right: 6px; }
+    .form-submit-blue { background: var(--accent); color: white; border: none; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-right: 6px; }
+    .form-submit-red { background: var(--red); color: white; border: none; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
 
+    /* ─── OUTCOME LOGGED ─── */
+    .outcome-logged { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 7px; padding: 8px 12px; font-size: 11px; color: var(--green); margin-bottom: 12px; }
+
+    /* ─── NO ANSWER ─── */
+    .no-answer-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 8px 12px; font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+
+    /* ─── LOADING / EMPTY ─── */
     .loading { text-align: center; padding: 60px 20px; color: var(--text-secondary); font-size: 14px; }
     .empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); font-size: 14px; }
-    .chevron { font-size: 12px; color: var(--text-secondary); transition: transform 0.2s; }
-    .chevron.open { transform: rotate(180deg); }
 
+    /* ─── MODAL ─── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .modal-title { font-size: 16px; font-weight: 600; }
-    .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; padding: 4px; }
-    .modal-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-    .modal-tab { background: none; border: none; color: var(--text-secondary); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: all 0.15s; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .modal-title { font-size: 15px; font-weight: 600; }
+    .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; }
+    .modal-tabs { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .modal-tab { background: none; border: none; color: var(--text-secondary); font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 5px 10px; border-radius: 6px; }
     .modal-tab.active { background: var(--accent); color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .form-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-group { margin-bottom: 12px; }
-    .csv-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 12px; }
+    .form-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; display: block; text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-group { margin-bottom: 10px; }
+    .form-submit { width: 100%; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 7px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px; }
+    .form-submit:hover { background: var(--accent-hover); }
+    .csv-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 10px; }
     .csv-upload-area:hover { border-color: var(--accent); }
-    .csv-upload-area p { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
-    .csv-template { font-size: 11px; color: var(--accent); cursor: pointer; text-decoration: underline; margin-bottom: 12px; display: block; }
-    .form-submit { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px; }
-    .form-submit:hover { background: #1648c8; }
+    .csv-upload-area p { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+    .csv-template { font-size: 11px; color: var(--accent); cursor: pointer; text-decoration: underline; margin-bottom: 10px; display: block; }
 
-    @media (max-width: 600px) {
-      .detail-grid, .clinical-grid { grid-template-columns: 1fr; }
-      .detail-grid-3, .behavioral-grid { grid-template-columns: 1fr 1fr; }
-      .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    /* ─── CALL HISTORY TAB ─── */
+    .history-layout { display: grid; grid-template-columns: 260px 1fr; gap: 16px; min-height: calc(100vh - 120px); }
+    .history-sidebar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .history-sidebar-header { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .history-sidebar-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); margin-bottom: 8px; }
+    .patient-list-item {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
     }
+    .patient-list-item:hover { background: var(--surface2); }
+    .patient-list-item.active { background: var(--surface2); border-left: 3px solid var(--accent); }
+    .patient-list-name { font-size: 13px; font-weight: 500; }
+    .patient-list-meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 
-  .collapsible-section {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 10px;
-  overflow: hidden;
-}
+    .history-main { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .history-main-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .history-main-title { font-size: 14px; font-weight: 600; }
+    .history-filters { display: flex; gap: 8px; align-items: center; }
+    .filter-select { padding: 5px 9px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 11px; font-family: 'DM Sans', sans-serif; }
+    .history-search { padding: 5px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 11px; font-family: 'DM Sans', sans-serif; width: 160px; }
+    .history-search::placeholder { color: var(--text-tertiary); }
 
-.collapsible-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-secondary);
-  background: var(--surface2);
-  transition: background 0.15s;
-}
+    .call-list { overflow-y: auto; }
+    .call-list-item {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .call-list-item:hover { background: var(--surface2); }
+    .call-list-item.active { background: var(--surface2); }
+    .call-list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .call-list-date { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; }
+    .call-list-badges { display: flex; gap: 6px; align-items: center; }
+    .call-type-badge { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; }
+    .call-type-badge.ccm { background: #0d2137; color: #388bfd; border: 1px solid #1a3a6e; }
+    .call-type-badge.avc { background: #1a2a0d; color: #56d364; border: 1px solid #1a4d1e; }
+    .call-list-summary { font-size: 11px; color: var(--text-secondary); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-.collapsible-header:hover { background: var(--border); }
+    /* ─── CALL DETAIL PANEL ─── */
+    .call-detail { padding: 18px; overflow-y: auto; display: none; }
+    .call-detail.open { display: block; }
+    .call-detail-header { margin-bottom: 16px; }
+    .call-detail-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .call-detail-meta { font-size: 11px; color: var(--text-secondary); display: flex; gap: 12px; flex-wrap: wrap; }
 
-.section-chevron {
-  font-size: 10px;
-  transition: transform 0.2s;
-}
+    .detail-section { margin-bottom: 18px; }
+    .detail-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-tertiary); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+    .transcript-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 11px; line-height: 1.7; color: var(--text-secondary); max-height: 280px; overflow-y: auto; font-family: 'DM Mono', monospace; white-space: pre-wrap; }
 
-.section-chevron.open { transform: rotate(180deg); }
+    .clinical-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .clinical-detail-item { background: var(--surface2); border-radius: 5px; padding: 7px 10px; }
+    .clinical-detail-key { font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-tertiary); margin-bottom: 2px; }
+    .clinical-detail-val { font-size: 12px; font-weight: 500; }
+    .cv-true { color: var(--yellow); }
+    .cv-false { color: var(--green); }
+    .cv-urgent { color: var(--red); }
+    .cv-monitor { color: var(--yellow); }
+    .cv-stable { color: var(--green); }
 
-.collapsible-body {
-  display: none;
-  padding: 14px;
-}
+    .behavioral-detail-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .beh-detail-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; text-align: center; flex: 1; min-width: 80px; }
+    .beh-detail-val { font-size: 18px; font-weight: 600; }
+    .beh-detail-key { font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-tertiary); margin-top: 2px; }
 
-.collapsible-body.open { display: block; }
+    .no-selection { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--text-tertiary); font-size: 13px; }
 
-    .avc-notification {
-  background: #1a2a4a;
-  border: 1px solid #1a56db;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 12px;
-  color: #6b9fff;
-  margin-bottom: 12px;
-}
-
-.avc-badge {
-  background: var(--accent);
-  color: white;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 6px;
-  vertical-align: middle;
-  letter-spacing: 0.5px;
-}
-    
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .history-layout { grid-template-columns: 1fr; }
+      .history-sidebar { max-height: 260px; overflow-y: auto; }
+      .stats-bar { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 500px) {
+      .chips-row .chip-key { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -241,32 +388,78 @@
     <div class="logo-dot"></div>
     <div>
       <div class="logo-text">Orbital Connect</div>
-      <div class="logo-sub">BETWEEN VISITS CARE</div>
+      <div class="logo-sub">Between Visits Care</div>
     </div>
   </div>
+
+  <div class="header-center">
+    <button class="tab-btn active" onclick="switchView('dashboard', this)">Dashboard</button>
+    <button class="tab-btn" onclick="switchView('history', this)">Call History</button>
+  </div>
+
   <div class="header-right">
     <span class="last-updated" id="lastUpdated">—</span>
-    <button class="btn-header" onclick="loadPatients()">↻ Refresh</button>
+    <button class="btn-header" onclick="manualRefresh()">↻ Refresh</button>
     <button class="btn-header primary" onclick="openModal()">+ Add Patient</button>
   </div>
 </header>
 
 <main>
-  <div class="stats-bar">
-    <div class="stat red"><div class="stat-number" id="countRed">—</div><div class="stat-label">Urgent</div></div>
-    <div class="stat yellow"><div class="stat-number" id="countYellow">—</div><div class="stat-label">Monitor</div></div>
-    <div class="stat green"><div class="stat-number" id="countGreen">—</div><div class="stat-label">Stable</div></div>
+
+  <!-- ─── DASHBOARD VIEW ─── -->
+  <div class="view active" id="view-dashboard">
+    <div class="stats-bar">
+      <div class="stat red"><div class="stat-number" id="countRed">—</div><div class="stat-label">Urgent</div></div>
+      <div class="stat yellow"><div class="stat-number" id="countYellow">—</div><div class="stat-label">Monitor</div></div>
+      <div class="stat green"><div class="stat-number" id="countGreen">—</div><div class="stat-label">Stable</div></div>
+    </div>
+
+    <div class="search-row">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search by name, condition, or physician…" oninput="filterPatients()">
+    </div>
+
+    <div class="section-label">Patient Priority Queue</div>
+    <div id="patients"><div class="loading">Loading patients…</div></div>
   </div>
 
-  <div class="search-bar">
-    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search patients by name, condition, or physician..." oninput="filterPatients()">
+  <!-- ─── CALL HISTORY VIEW ─── -->
+  <div class="view" id="view-history">
+    <div class="history-layout">
+      <div class="history-sidebar">
+        <div class="history-sidebar-header">
+          <div class="history-sidebar-title">Patients</div>
+          <input type="text" class="search-input" id="historyPatientSearch" placeholder="Search…" oninput="filterHistoryPatients()" style="font-size:11px;padding:6px 10px;margin-bottom:0">
+        </div>
+        <div id="historyPatientList"><div class="loading" style="padding:20px">Loading…</div></div>
+      </div>
+
+      <div class="history-main">
+        <div class="history-main-header">
+          <div class="history-main-title" id="historyMainTitle">Select a patient</div>
+          <div class="history-filters">
+            <input type="text" class="history-search" id="historyCallSearch" placeholder="Search calls…" oninput="filterCalls()">
+            <select class="filter-select" id="historyCallType" onchange="filterCalls()">
+              <option value="all">All types</option>
+              <option value="ccm">CCM only</option>
+              <option value="avc">AVC only</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 200px)">
+          <div id="callListContainer" style="border-right:1px solid var(--border);overflow-y:auto">
+            <div class="no-selection">← Select a patient</div>
+          </div>
+          <div id="callDetailContainer">
+            <div class="no-selection">← Select a call</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="section-title">Patient Priority Queue</div>
-  <div id="patients"><div class="loading">Loading patients...</div></div>
 </main>
 
-<!-- Add Patient Modal -->
+<!-- ─── ADD PATIENT MODAL ─── -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-header">
@@ -274,8 +467,8 @@
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('single', this)">Single Patient</button>
-      <button class="modal-tab" onclick="switchTab('bulk', this)">Bulk CSV Upload</button>
+      <button class="modal-tab active" onclick="switchModalTab('single',this)">Single Patient</button>
+      <button class="modal-tab" onclick="switchModalTab('bulk',this)">Bulk CSV</button>
     </div>
     <div class="tab-content active" id="tab-single">
       <div class="form-group"><label class="form-label">First Name</label><input type="text" id="firstName" placeholder="e.g. Margaret"></div>
@@ -284,7 +477,7 @@
       <div class="form-group">
         <label class="form-label">Condition</label>
         <select id="condition">
-          <option value="">Select condition...</option>
+          <option value="">Select condition…</option>
           <option value="CHF">CHF</option>
           <option value="Diabetes">Diabetes</option>
           <option value="COPD">COPD</option>
@@ -300,12 +493,12 @@
     <div class="tab-content" id="tab-bulk">
       <span class="csv-template" onclick="downloadTemplate()">⬇ Download CSV Template</span>
       <div class="csv-upload-area" onclick="document.getElementById('csvFile').click()">
-        <div style="font-size: 24px">📄</div>
+        <div style="font-size:22px">📄</div>
         <p>Click to upload CSV file</p>
-        <p style="font-size: 11px; margin-top: 4px;">or drag and drop</p>
+        <p style="font-size:10px;margin-top:3px">or drag and drop</p>
         <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
       </div>
-      <div id="csvPreview" style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;"></div>
+      <div id="csvPreview" style="font-size:11px;color:var(--text-secondary);margin-bottom:10px"></div>
       <button class="form-submit" onclick="uploadCSV()" id="csvSubmit" style="display:none">Import Patients</button>
     </div>
   </div>
@@ -313,303 +506,244 @@
 
 <script>
 const SUPABASE_URL = "https://oomjzfqecnkshvfgmjqb.supabase.co";
-let csvPatients = [];
 let allPatients = [];
+let csvPatients = [];
+let historyAllCalls = [];
+let selectedHistoryPatient = null;
+let filteredCalls = [];
 
-function formatClinicalValue(key, value) {
-  if (value === null || value === undefined) return '<span style="color:var(--text-secondary)">—</span>';
-  if (typeof value === 'boolean') return `<span class="clinical-value ${value}">${value ? 'Yes' : 'No'}</span>`;
-  if (key === 'overall_clinical_impression') return `<span class="clinical-value ${value}">${value}</span>`;
-  return `<span class="clinical-value">${value}</span>`;
+// ─── VIEW SWITCHING ───
+function switchView(view, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  btn.classList.add('active');
+  if (view === 'history') renderHistoryPatientList();
 }
 
-function renderClinicalData(structured) {
-  if (!structured) return '<div class="summary-box" style="color:var(--text-secondary)">No clinical extraction yet</div>';
-  const fields = [
-    { key: 'chest_pain', label: 'Chest Pain' },
-    { key: 'shortness_of_breath', label: 'Shortness of Breath' },
-    { key: 'shortness_of_breath_severity', label: 'SOB Severity' },
-    { key: 'shortness_of_breath_at_rest', label: 'SOB at Rest' },
-    { key: 'swelling', label: 'Swelling' },
-    { key: 'swelling_location', label: 'Swelling Location' },
-    { key: 'weight_stable', label: 'Weight Stable' },
-    { key: 'weight_change_lbs', label: 'Weight Change' },
-    { key: 'medication_adherence', label: 'Meds Adherence' },
-    { key: 'medication_concerns', label: 'Med Concerns' },
-    { key: 'energy_level', label: 'Energy Level' },
-    { key: 'dizziness', label: 'Dizziness' },
-    { key: 'er_visit_since_last_call', label: 'ER Visit' },
-    { key: 'overall_clinical_impression', label: 'Impression' },
-  ];
-  const html = fields.map(f => `<div class="clinical-item"><div class="clinical-key">${f.label}</div><div>${formatClinicalValue(f.key, structured[f.key])}</div></div>`).join('');
-  const concerns = structured.additional_concerns;
-  const concernsHtml = concerns ? `<div class="summary-box" style="margin-top:8px"><div class="detail-label" style="margin-bottom:4px">Additional Concerns</div>${concerns}</div>` : '';
-  return `<div class="clinical-grid">${html}</div>${concernsHtml}`;
+// ─── DATA LOADING ───
+async function loadPatients() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-dashboard-data`);
+    const data = await res.json();
+    allPatients = data;
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+    renderPatients(allPatients);
+  } catch(err) {
+    console.error(err);
+    document.getElementById('patients').innerHTML = '<div class="empty">Failed to load. Check connection.</div>';
+  }
 }
 
-function renderBehavioralData(behavioral) {
-  if (!behavioral) return '<div class="summary-box" style="color:var(--text-secondary)">No audio analysis yet</div>';
-  const sentimentColor = behavioral.overall_sentiment === 'negative' ? 'var(--red)' : behavioral.overall_sentiment === 'positive' ? 'var(--green)' : 'var(--text-secondary)';
-  return `
-    <div class="behavioral-grid">
-      <div class="behavioral-item"><div class="behavioral-value" style="color:${sentimentColor}">${behavioral.overall_sentiment || '—'}</div><div class="behavioral-label">Sentiment</div></div>
-      <div class="behavioral-item"><div class="behavioral-value">${behavioral.words_per_minute || '—'}</div><div class="behavioral-label">Words/Min</div></div>
-      <div class="behavioral-item"><div class="behavioral-value">${behavioral.hesitation_count ?? '—'}</div><div class="behavioral-label">Hesitations</div></div>
-      <div class="behavioral-item"><div class="behavioral-value">${behavioral.positive_sentiment_pct ?? '—'}%</div><div class="behavioral-label">Positive</div></div>
-      <div class="behavioral-item"><div class="behavioral-value">${behavioral.negative_sentiment_pct ?? '—'}%</div><div class="behavioral-label">Negative</div></div>
-      <div class="behavioral-item"><div class="behavioral-value">${behavioral.audio_duration_seconds ? Math.round(behavioral.audio_duration_seconds / 60) + 'm' : '—'}</div><div class="behavioral-label">Duration</div></div>
-    </div>`;
-}
+function manualRefresh() { loadPatients(); }
 
-function renderCallHistory(history) {
-  if (!history || history.length === 0) return '<div class="summary-box" style="color:var(--text-secondary)">No call history yet</div>';
-  return history.map(call => {
-    const date = new Date(call.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const status = call.overall_status || 'green';
-    const statusColor = status === 'red' ? 'var(--red)' : status === 'yellow' ? 'var(--yellow)' : 'var(--green)';
-    const duration = call.duration_seconds ? `${Math.round(call.duration_seconds / 60)}m` : '—';
-    const outcomeHtml = call.outcome_status ? `<span style="color:var(--green);margin-left:8px">✅ ${call.outcome_status}</span>` : '';
-    return `
-      <div class="call-history-item">
-        <div class="call-history-header">
-          <span class="call-history-date">${date}</span>
-          <div>
-            <span style="color:${statusColor};font-size:11px;font-weight:600;text-transform:uppercase">${status}</span>
-            <span style="color:var(--text-secondary);font-size:11px;margin-left:8px">${duration}</span>
-            ${outcomeHtml}
-          </div>
-        </div>
-        <div class="call-history-summary">${call.call_summary || 'No summary available'}</div>
-        ${call.red_flags_detected ? `<div style="color:var(--red);font-size:11px;margin-top:6px;font-family:monospace"> ${call.red_flags_detected}</div>` : ''}
-        ${call.yellow_flags_detected ? `<div style="color:var(--yellow);font-size:11px;margin-top:6px;font-family:monospace">⚠️ ${call.yellow_flags_detected}</div>` : ''}
-      </div>`;
-  }).join('');
-}
-
+// ─── FILTER ───
 function filterPatients() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
+  const q = document.getElementById('searchInput').value.toLowerCase();
   const filtered = allPatients.filter(p =>
-    `${p.patient_first_name} ${p.patient_last_name}`.toLowerCase().includes(query) ||
-    p.condition.toLowerCase().includes(query) ||
-    p.physician_name.toLowerCase().includes(query)
+    `${p.patient_first_name} ${p.patient_last_name}`.toLowerCase().includes(q) ||
+    (p.condition||'').toLowerCase().includes(q) ||
+    (p.physician_name||'').toLowerCase().includes(q)
   );
   renderPatients(filtered);
 }
 
-async function loadPatients() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-dashboard-data`);
-    allPatients = await res.json();
-    document.getElementById("lastUpdated").textContent = new Date().toLocaleTimeString();
-    renderPatients(allPatients);
-  } catch (err) {
-    console.error(err);
-    document.getElementById("patients").innerHTML = '<div class="empty">Failed to load patients. Check connection.</div>';
+// ─── CLINICAL CHIP HELPERS ───
+function chipColor(key, value) {
+  if (value === null || value === undefined) return '';
+  if (key === 'overall_clinical_impression') {
+    if (value === 'urgent') return 'flag-red';
+    if (value === 'monitor') return 'flag-yellow';
+    if (value === 'stable') return 'flag-green';
   }
+  if (typeof value === 'boolean') return value ? 'flag-yellow' : 'flag-green';
+  return '';
+}
+function chipVal(value) {
+  if (value === null || value === undefined) return '—';
+  if (value === true) return 'Yes';
+  if (value === false) return 'No';
+  return value;
+}
+function renderCompactClinical(structured) {
+  if (!structured) return '<div style="font-size:11px;color:var(--text-tertiary)">No extraction yet</div>';
+  const KEY_FIELDS = [
+    {key:'chest_pain',label:'Chest Pain'},
+    {key:'shortness_of_breath',label:'SOB'},
+    {key:'swelling',label:'Swelling'},
+    {key:'medication_adherence',label:'Meds'},
+    {key:'er_visit_since_last_call',label:'ER Visit'},
+    {key:'overall_clinical_impression',label:'Impression'},
+  ];
+  const chips = KEY_FIELDS.map(f => {
+    const v = structured[f.key];
+    const c = chipColor(f.key, v);
+    return `<span class="chip ${c}"><span class="chip-key">${f.label}</span> ${chipVal(v)}</span>`;
+  }).join('');
+  const concerns = structured.additional_concerns;
+  return `<div class="chips-row">${chips}</div>${concerns ? `<div style="font-size:10px;color:var(--text-tertiary);margin-top:4px">⚠ ${concerns}</div>` : ''}`;
+}
+function renderCompactBehavioral(behavioral) {
+  if (!behavioral) return '<div style="font-size:11px;color:var(--text-tertiary)">No audio analysis yet</div>';
+  const sentColor = behavioral.overall_sentiment === 'negative' ? 'var(--red)' : behavioral.overall_sentiment === 'positive' ? 'var(--green)' : 'var(--text-primary)';
+  return `<div class="behavioral-row">
+    <div class="beh-stat"><div class="beh-val" style="color:${sentColor};font-size:12px">${behavioral.overall_sentiment||'—'}</div><div class="beh-key">Sentiment</div></div>
+    <div class="beh-stat"><div class="beh-val">${behavioral.words_per_minute||'—'}</div><div class="beh-key">WPM</div></div>
+    <div class="beh-stat"><div class="beh-val">${behavioral.hesitation_count??'—'}</div><div class="beh-key">Hesitations</div></div>
+    <div class="beh-stat"><div class="beh-val">${behavioral.audio_duration_seconds ? Math.round(behavioral.audio_duration_seconds/60)+'m' : '—'}</div><div class="beh-key">Duration</div></div>
+  </div>`;
 }
 
+// ─── RENDER PATIENTS ───
 function renderPatients(patients) {
-  const container = document.getElementById("patients");
-
+  const container = document.getElementById('patients');
   if (!patients || patients.length === 0) {
     container.innerHTML = '<div class="empty">No patients found.</div>';
-    document.getElementById("countRed").textContent = 0;
-    document.getElementById("countYellow").textContent = 0;
-    document.getElementById("countGreen").textContent = 0;
+    document.getElementById('countRed').textContent = 0;
+    document.getElementById('countYellow').textContent = 0;
+    document.getElementById('countGreen').textContent = 0;
     return;
   }
+  patients.sort((a,b) => b.priority_score - a.priority_score);
+  document.getElementById('countRed').textContent = patients.filter(p => p.priority_score >= 8).length;
+  document.getElementById('countYellow').textContent = patients.filter(p => p.priority_score >= 3 && p.priority_score < 8).length;
+  document.getElementById('countGreen').textContent = patients.filter(p => p.priority_score < 3).length;
 
-  patients.sort((a, b) => b.priority_score - a.priority_score);
-  document.getElementById("countRed").textContent = patients.filter(p => p.priority_score >= 8).length;
-  document.getElementById("countYellow").textContent = patients.filter(p => p.priority_score >= 3 && p.priority_score < 8).length;
-  document.getElementById("countGreen").textContent = patients.filter(p => p.priority_score < 3).length;
+  // Preserve open state
+  const openIds = new Set();
+  container.querySelectorAll('.patient-card').forEach(card => {
+    if (card.querySelector('.card-body.open')) openIds.add(card.dataset.patientId);
+  });
 
-  container.innerHTML = "";
-
+  container.innerHTML = '';
   patients.forEach(patient => {
-    const status = patient.priority_score >= 8 ? "red" : patient.priority_score >= 3 ? "yellow" : "green";
-    const statusLabel = status === "red" ? "Urgent" : status === "yellow" ? "Monitor" : "Stable";
-    const hasRedFlags = patient.flag_summary && patient.flag_summary !== "No flags" && status === "red";
-    const hasYellowFlags = patient.flag_summary && patient.flag_summary !== "No flags" && status === "yellow";
+    const status = patient.priority_score >= 8 ? 'red' : patient.priority_score >= 3 ? 'yellow' : 'green';
+    const statusLabel = status === 'red' ? 'Urgent' : status === 'yellow' ? 'Monitor' : 'Stable';
+    const hasRedFlags = patient.flag_summary && patient.flag_summary !== 'No flags' && patient.flag_summary !== 'No flags detected' && status === 'red';
+    const hasYellowFlags = patient.flag_summary && patient.flag_summary !== 'No flags' && patient.flag_summary !== 'No flags detected' && status === 'yellow';
 
-    const structured = patient.structured_data ?
-      (typeof patient.structured_data === 'string' ? JSON.parse(patient.structured_data) : patient.structured_data) : null;
-    const behavioral = patient.behavioral_data ?
-      (typeof patient.behavioral_data === 'string' ? JSON.parse(patient.behavioral_data) : patient.behavioral_data) : null;
+    const structured = patient.structured_data ? (typeof patient.structured_data === 'string' ? JSON.parse(patient.structured_data) : patient.structured_data) : null;
+    const behavioral = patient.behavioral_data ? (typeof patient.behavioral_data === 'string' ? JSON.parse(patient.behavioral_data) : patient.behavioral_data) : null;
 
-    const noCallsLately = patient.call_number === 0 || !patient.last_call_date;
-    const noAnswerHtml = noCallsLately ? '' : (() => {
+    const noAnswerHtml = (patient.call_number > 0 && patient.last_call_date) ? (() => {
       const lastCall = patient.call_history?.[0];
-      if (lastCall && lastCall.duration_seconds < 10) {
-        return `<div class="no-answer-box">📵 Last call had no answer or was very short — manual follow up may be needed</div>`;
-      }
-      return '';
-    })();
+      return (lastCall && lastCall.duration_seconds < 10) ? `<div class="no-answer-box">📵 Last call: no answer or very short — manual follow-up may be needed</div>` : '';
+    })() : '';
 
-    const outcomeHtml = patient.outcome_status ? `
-      <div class="outcome-logged">
-        ✅ Outcome logged: <strong>${patient.outcome_status}</strong>
-        ${patient.outcome_notes ? ` — ${patient.outcome_notes}` : ''}
-        ${patient.outcome_logged_by ? ` (by ${patient.outcome_logged_by})` : ''}
-      </div>` : '';
+    const outcomeHtml = patient.outcome_status ? `<div class="outcome-logged">✅ Outcome: <strong>${patient.outcome_status}</strong>${patient.outcome_notes ? ` — ${patient.outcome_notes}` : ''}${patient.outcome_logged_by ? ` (${patient.outcome_logged_by})` : ''}</div>` : '';
 
-    const card = document.createElement("div");
+    // AVC section — show only if unread OR scheduled
+    const showAvc = patient.avc_unread || (patient.avc_scheduled && patient.avc_next_call_date);
+    const avcHtml = showAvc ? `
+      ${patient.avc_unread ? `<div class="avc-notification">
+        <span>📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
+        ${patient.latest_avc_call_id ? `<button class="btn btn-sm btn-outline" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : ''}
+      </div>` : ''}
+      ${(patient.avc_scheduled && patient.avc_next_call_date) ? `<div class="avc-panel">
+        <div class="avc-panel-label">AVC Scheduled</div>
+        ${patient.latest_avc_summary && patient.avc_unread ? `<div class="summary-box" style="margin-bottom:8px">${patient.latest_avc_summary}</div>` : ''}
+        <div class="date-time-row" style="margin-bottom:8px">
+          <input type="date" value="${patient.avc_next_call_date||''}" onchange="updateAvcDate(${patient.patient_id},this.value)">
+          <input type="time" value="${patient.avc_preferred_call_time||'10:00'}" onchange="updateAvcTime(${patient.patient_id},this.value)">
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="cancelAvc(${patient.patient_id})" style="width:100%">Cancel After Visit Call</button>
+      </div>` : ''}
+    ` : '';
+
+    const isOpen = openIds.has(String(patient.patient_id));
+
+    const card = document.createElement('div');
     card.className = `patient-card ${status}`;
+    card.dataset.patientId = patient.patient_id;
     card.innerHTML = `
       <div class="card-header" onclick="toggleCard(this)">
-        <div class="patient-info">
+        <div style="flex:1">
           <div class="patient-name">${patient.patient_first_name} ${patient.patient_last_name}</div>
           <div class="patient-meta">
             <span>${patient.condition}</span>
             <span>${patient.physician_name}</span>
-            ${patient.last_call_date ? `<span>Last call: ${patient.last_call_date}</span>` : "<span>No calls yet</span>"}
-            ${patient.next_call_date ? `<span>Next call: ${patient.next_call_date}</span>` : ""}
-            ${patient.call_number > 0 ? `<span>${patient.call_number} call${patient.call_number !== 1 ? 's' : ''}</span>` : ""}
+            ${patient.last_call_date ? `<span>Last call: ${patient.last_call_date}</span>` : '<span>No calls yet</span>'}
+            ${patient.next_call_date ? `<span>Next CCM: ${patient.next_call_date}</span>` : ''}
+            ${patient.call_number > 0 ? `<span>${patient.call_number} call${patient.call_number!==1?'s':''}</span>` : ''}
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px">
           <span class="badge ${status}"><span class="badge-dot"></span>${statusLabel}</span>
-          <span class="chevron">▼</span>
+          <span class="chevron ${isOpen?'open':''}">▼</span>
         </div>
       </div>
-      <div class="card-body">
-        <div class="divider"></div>
-        ${hasRedFlags ? `<div class="flags-box"> ${patient.flag_summary}</div>` : ""}
-        ${hasYellowFlags ? `<div class="flags-box yellow">⚠️ ${patient.flag_summary}</div>` : ""}
+      <div class="card-body ${isOpen?'open':''}">
+        <div class="card-divider"></div>
+        ${hasRedFlags ? `<div class="flags-box red">🚨 ${patient.flag_summary}</div>` : ''}
+        ${hasYellowFlags ? `<div class="flags-box yellow">⚠️ ${patient.flag_summary}</div>` : ''}
         ${noAnswerHtml}
         ${outcomeHtml}
 
-        <div class="detail-grid-3">
-          <div><div class="detail-label">Priority Score</div><div class="detail-value">${patient.priority_score}/10</div></div>
-          <div><div class="detail-label">Condition</div><div class="detail-value">${patient.condition}</div></div>
-          <div><div class="detail-label">Total Calls</div><div class="detail-value">${patient.call_number || 0}</div></div>
+        <div class="summary-label">Latest Call Summary</div>
+        <div class="summary-box">${patient.latest_summary || 'No calls yet'}</div>
+
+        <div class="inline-data-section">
+          <div class="inline-data-label">Clinical</div>
+          ${renderCompactClinical(structured)}
         </div>
 
-        <div class="detail-label" style="margin-bottom:6px">Latest Call Summary</div>
-        <div class="summary-box">${patient.latest_summary || "No calls yet"}</div>
+        <div class="inline-data-section">
+          <div class="inline-data-label">Behavioral</div>
+          ${renderCompactBehavioral(behavioral)}
+        </div>
 
-        <div class="collapsible-section">
-  <div class="collapsible-header" onclick="toggleSection(this)">
-    <span>Clinical Extraction</span>
-    <span class="section-chevron">▼</span>
-  </div>
-  <div class="collapsible-body">
-    ${renderClinicalData(structured)}
-  </div>
-</div>
+        <div class="section-block">
+          <div class="section-block-label">CCM Schedule</div>
+          <div class="date-time-row">
+            <input type="date" value="${patient.next_call_date||''}" onchange="updateCcmDate(${patient.patient_id},this.value)">
+            <input type="time" value="${patient.preferred_call_time||'10:00'}" onchange="updateCcmTime(${patient.patient_id},this.value)">
+          </div>
+        </div>
 
-<div class="collapsible-section">
-  <div class="collapsible-header" onclick="toggleSection(this)">
-    <span>Behavioral Analysis</span>
-    <span class="section-chevron">▼</span>
-  </div>
-  <div class="collapsible-body">
-    ${renderBehavioralData(behavioral)}
-  </div>
-</div>
+        ${avcHtml}
 
-<div class="collapsible-section">
-  <div class="collapsible-header" onclick="toggleSection(this)">
-    <span>Call History</span>
-    <span class="section-chevron">▼</span>
-  </div>
-  <div class="collapsible-body">
-    ${renderCallHistory(patient.call_history)}
-  </div>
-</div>
-<div class="collapsible-section">
-  <div class="collapsible-header" onclick="toggleSection(this)">
-    <span>CCM Schedule</span>
-    <span class="section-chevron">▼</span>
-  </div>
-  <div class="collapsible-body">
-    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Next Scheduled CCM Call</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px">
-      <input type="date" value="${patient.next_call_date || ''}" onchange="updateCcmDate(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
-      <input type="time" value="${patient.preferred_call_time || '10:00'}" onchange="updateCcmTime(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
-    </div>
-    <div style="font-size:11px;color:var(--text-secondary)">Changing the date or time here updates the next scheduled CCM call for this patient.</div>
-  </div>
-</div>
-        ${patient.avc_unread ? `<div class="avc-notification">📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}</strong></div>` : ""}
+        <div class="actions-divider">Actions</div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Now</button>
+          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">📋 Call History</button>
+          ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
+          <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'edit-form')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="toggleForm(this,'delete-form')">Remove</button>
+        </div>
 
-<div class="collapsible-section">
-  <div class="collapsible-header" onclick="toggleSection(this)">
-    <span>After Visit Care ${patient.avc_unread ? '<span class="avc-badge">NEW</span>' : ""}</span>
-    <span class="section-chevron">▼</span>
-  </div>
-  <div class="collapsible-body">
-    ${patient.latest_avc_summary ? `
-  <div class="summary-box">${patient.latest_avc_summary}</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <div style="font-size:11px;color:var(--text-secondary)">
-      ${patient.latest_avc_date ? `Call date: ${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}` : ""}
-    </div>
-    ${patient.avc_unread ? `<button class="btn btn-outline" style="font-size:11px;padding:4px 10px" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : `<span style="font-size:11px;color:var(--green)">✓ Reviewed</span>`}
-  </div>
-` : '<div class="summary-box" style="color:var(--text-secondary)">No After Visit Care calls yet</div>'}
-    ${patient.avc_scheduled && patient.avc_next_call_date ? `
-  <div style="margin-bottom:8px">
-    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">AVC Scheduled</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px">
-  <input type="date" class="avc-date-picker" value="${patient.avc_next_call_date || ''}" onchange="updateAvcDate(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
-  <input type="time" class="avc-time-picker" value="${patient.avc_preferred_call_time || '10:00'}" onchange="updateAvcTime(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
-</div>
-    <button class="btn btn-danger" onclick="cancelAvc(${patient.patient_id})" style="width:100%">Cancel After Visit Call</button>
-  </div>
-` : `
-  <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, '${patient.next_call_date || ''}', this)" style="width:100%">Schedule After Visit Call</button>
-`}
-  </div>
-</div>
-
-<div class="section-divider">Actions</div>
-<div class="actions">
-  <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Patient Now</button>
-  <button class="btn btn-outline" onclick="toggleForm(this, 'outcome-form')">Log Call Outcome</button>
-  <button class="btn btn-outline" onclick="toggleForm(this, 'edit-form')">Edit Patient Info</button>
-  <button class="btn btn-danger" onclick="toggleForm(this, 'delete-form')">Remove Patient from BVC</button>
-</div>
-
-        <div class="outcome-form">
+        <div class="inline-form outcome-form">
           <h4>Log Outcome</h4>
-          <select class="outcome-status-select">
-            <option value="">Select outcome...</option>
-            <option value="stable">Stable — no action needed</option>
-            <option value="physician_notified">Physician notified</option>
-            <option value="er_visit">ER visit</option>
-            <option value="hospitalized">Hospitalized</option>
-            <option value="no_followup">No follow-up needed</option>
-          </select>
+          <select class="outcome-status-select"><option value="">Select outcome…</option><option value="stable">Stable — no action needed</option><option value="physician_notified">Physician notified</option><option value="er_visit">ER visit</option><option value="hospitalized">Hospitalized</option><option value="no_followup">No follow-up needed</option></select>
           <textarea placeholder="Notes (optional)" rows="2" class="outcome-notes"></textarea>
           <input type="text" placeholder="Your name" class="outcome-logged-by">
-          <button class="outcome-submit" onclick="logOutcome(this, ${patient.patient_id})">Save Outcome</button>
+          <button class="form-submit-green" onclick="logOutcome(this,${patient.patient_id})">Save Outcome</button>
         </div>
 
-        <div class="edit-form">
+        <div class="inline-form edit-form">
           <h4>Edit Patient</h4>
           <input type="text" class="edit-first-name" placeholder="First name" value="${patient.patient_first_name}">
           <input type="text" class="edit-last-name" placeholder="Last name" value="${patient.patient_last_name}">
-          <input type="tel" class="edit-phone" placeholder="Phone number" value="${patient.phone_number || ''}">
+          <input type="tel" class="edit-phone" placeholder="Phone" value="${patient.phone_number||''}">
           <select class="edit-condition">
-            <option value="CHF" ${patient.condition === 'CHF' ? 'selected' : ''}>CHF</option>
-            <option value="Diabetes" ${patient.condition === 'Diabetes' ? 'selected' : ''}>Diabetes</option>
-            <option value="COPD" ${patient.condition === 'COPD' ? 'selected' : ''}>COPD</option>
-            <option value="CKD" ${patient.condition === 'CKD' ? 'selected' : ''}>CKD</option>
-            <option value="Hypertension" ${patient.condition === 'Hypertension' ? 'selected' : ''}>Hypertension</option>
-            <option value="Other" ${patient.condition === 'Other' ? 'selected' : ''}>Other</option>
+            <option value="CHF" ${patient.condition==='CHF'?'selected':''}>CHF</option>
+            <option value="Diabetes" ${patient.condition==='Diabetes'?'selected':''}>Diabetes</option>
+            <option value="COPD" ${patient.condition==='COPD'?'selected':''}>COPD</option>
+            <option value="CKD" ${patient.condition==='CKD'?'selected':''}>CKD</option>
+            <option value="Hypertension" ${patient.condition==='Hypertension'?'selected':''}>Hypertension</option>
+            <option value="Other" ${patient.condition==='Other'?'selected':''}>Other</option>
           </select>
           <input type="text" class="edit-physician" placeholder="Physician" value="${patient.physician_name}">
-          <input type="date" class="edit-next-call" value="${patient.next_call_date || ''}">
-          <button class="edit-submit" onclick="editPatient(this, ${patient.patient_id})">Save Changes</button>
+          <input type="date" class="edit-next-call" value="${patient.next_call_date||''}">
+          <button class="form-submit-blue" onclick="editPatient(this,${patient.patient_id})">Save Changes</button>
         </div>
 
-        <div class="delete-form">
+        <div class="inline-form delete-form">
           <h4>Remove Patient</h4>
-          <p>This will permanently delete <strong>${patient.patient_first_name} ${patient.patient_last_name}</strong> and all their call records. This cannot be undone.</p>
-          <p class="delete-warning">Type the patient's full name to confirm:</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">This permanently deletes <strong>${patient.patient_first_name} ${patient.patient_last_name}</strong> and all their records. This cannot be undone.</p>
+          <p style="font-size:11px;color:var(--red);margin-bottom:6px">Type the patient's full name to confirm:</p>
           <input type="text" class="delete-confirm-input" placeholder="${patient.patient_first_name} ${patient.patient_last_name}">
-          <button class="delete-confirm-btn" onclick="deletePatient(this, ${patient.patient_id}, '${patient.patient_first_name} ${patient.patient_last_name}')">Permanently Remove</button>
+          <button class="form-submit-red" onclick="deletePatient(this,${patient.patient_id},'${patient.patient_first_name} ${patient.patient_last_name}')">Permanently Remove</button>
         </div>
       </div>
     `;
@@ -619,338 +753,365 @@ function renderPatients(patients) {
 
 function toggleCard(header) {
   const body = header.nextElementSibling;
-  const chevron = header.querySelector(".chevron");
-  body.classList.toggle("open");
-  chevron.classList.toggle("open");
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
 }
 
 function toggleForm(btn, formClass) {
-  const body = btn.closest(".card-body");
+  const body = btn.closest('.card-body');
   const form = body.querySelector(`.${formClass}`);
-  const allForms = body.querySelectorAll('.outcome-form, .edit-form, .delete-form');
+  const allForms = body.querySelectorAll('.inline-form');
   allForms.forEach(f => { if (f !== form) f.classList.remove('open'); });
-  form.classList.toggle("open");
+  form.classList.toggle('open');
 }
 
+// ─── PATIENT ACTIONS ───
 async function callPatient(patientId) {
   const res = await fetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
-  if (res.ok) { alert("✅ Call started successfully"); }
-  else { alert("❌ Call failed — check connection"); }
+  if (res.ok) alert('✅ Call started successfully');
+  else alert('❌ Call failed — check connection');
 }
 
 async function logOutcome(btn, patientId) {
-  const form = btn.closest(".outcome-form");
-  const status = form.querySelector(".outcome-status-select").value;
-  const notes = form.querySelector(".outcome-notes").value;
-  const loggedBy = form.querySelector(".outcome-logged-by").value;
-  if (!status) { alert("Please select an outcome"); return; }
+  const form = btn.closest('.inline-form');
+  const status = form.querySelector('.outcome-status-select').value;
+  const notes = form.querySelector('.outcome-notes').value;
+  const loggedBy = form.querySelector('.outcome-logged-by').value;
+  if (!status) { alert('Please select an outcome'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ call_id: patientId, outcome_status: status, outcome_notes: notes, outcome_logged_by: loggedBy || "staff", followup_required: false })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ call_id: patientId, outcome_status: status, outcome_notes: notes, outcome_logged_by: loggedBy || 'staff', followup_required: false })
   });
-  if (res.ok) { alert("✅ Outcome logged"); form.classList.remove("open"); loadPatients(); }
-  else { alert("❌ Failed to log outcome"); }
+  if (res.ok) { alert('✅ Outcome logged'); form.classList.remove('open'); loadPatients(); }
+  else alert('❌ Failed to log outcome');
 }
 
 async function editPatient(btn, patientId) {
-  const form = btn.closest(".edit-form");
+  const form = btn.closest('.inline-form');
   const updates = {
-    patient_first_name: form.querySelector(".edit-first-name").value.trim(),
-    patient_last_name: form.querySelector(".edit-last-name").value.trim(),
-    phone_number: form.querySelector(".edit-phone").value.trim(),
-    condition: form.querySelector(".edit-condition").value,
-    physician_name: form.querySelector(".edit-physician").value.trim(),
-    next_call_date: form.querySelector(".edit-next-call").value || null
+    patient_first_name: form.querySelector('.edit-first-name').value.trim(),
+    patient_last_name: form.querySelector('.edit-last-name').value.trim(),
+    phone_number: form.querySelector('.edit-phone').value.trim(),
+    condition: form.querySelector('.edit-condition').value,
+    physician_name: form.querySelector('.edit-physician').value.trim(),
+    next_call_date: form.querySelector('.edit-next-call').value || null
   };
-  if (!updates.patient_first_name || !updates.patient_last_name || !updates.phone_number) {
-    alert("Please fill in all required fields");
-    return;
-  }
+  if (!updates.patient_first_name || !updates.patient_last_name || !updates.phone_number) { alert('Please fill in all required fields'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type: "edit", patient_id: patientId, updates })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates })
   });
-  if (res.ok) { alert("✅ Patient updated"); form.classList.remove("open"); loadPatients(); }
-  else { alert("❌ Failed to update patient"); }
+  if (res.ok) { alert('✅ Patient updated'); form.classList.remove('open'); loadPatients(); }
+  else alert('❌ Failed to update patient');
 }
 
 async function deletePatient(btn, patientId, fullName) {
-  const form = btn.closest(".delete-form");
-  const confirmName = form.querySelector(".delete-confirm-input").value.trim();
-  if (!confirmName) { alert("Please type the patient's full name to confirm"); return; }
+  const form = btn.closest('.inline-form');
+  const confirmName = form.querySelector('.delete-confirm-input').value.trim();
+  if (!confirmName) { alert('Please type the full name to confirm'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type: "delete", patient_id: patientId, confirm_name: confirmName })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'delete', patient_id: patientId, confirm_name: confirmName })
   });
-  if (res.ok) { alert("✅ Patient removed"); loadPatients(); }
+  if (res.ok) { alert('✅ Patient removed'); loadPatients(); }
   else {
     const err = await res.json();
-    if (err.error === "Name confirmation does not match") {
-      alert("❌ Name doesn't match. Please type the exact full name to confirm deletion.");
-    } else {
-      alert("❌ Failed to remove patient");
-    }
+    alert(err.error === 'Name confirmation does not match' ? '❌ Name doesn\'t match' : '❌ Failed to remove patient');
   }
 }
 
-function openModal() { document.getElementById("modalOverlay").classList.add("open"); }
-function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); clearForm(); }
-function handleOverlayClick(e) { if (e.target === document.getElementById("modalOverlay")) closeModal(); }
-
-function clearForm() {
-  document.getElementById("firstName").value = "";
-  document.getElementById("lastName").value = "";
-  document.getElementById("phoneNumber").value = "";
-  document.getElementById("condition").value = "";
-  document.getElementById("physicianName").value = "";
-  document.getElementById("firstCallDate").value = "";
-  document.getElementById("csvPreview").textContent = "";
-  document.getElementById("csvSubmit").style.display = "none";
-  csvPatients = [];
+// ─── CCM SCHEDULE ───
+async function updateCcmDate(patientId, newDate) {
+  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { next_call_date: newDate } })
+  });
+}
+async function updateCcmTime(patientId, newTime) {
+  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { preferred_call_time: newTime } })
+  });
 }
 
-function switchTab(tab, btn) {
-  document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById(`tab-${tab}`).classList.add("active");
+// ─── AVC ───
+async function scheduleAvc(patientId, currentCcmDate, btn) {
+  const today = new Date();
+  const callDate = new Date(today.setDate(today.getDate() + 2)).toISOString().split('T')[0];
+  if (currentCcmDate && currentCcmDate === callDate) {
+    const d = new Date(callDate); d.setDate(d.getDate() + 1);
+    await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { next_call_date: d.toISOString().split('T')[0] } })
+    });
+  }
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_scheduled: true, avc_next_call_date: callDate } })
+  });
+  if (res.ok) { alert(`✅ After Visit Call scheduled for ${callDate}`); loadPatients(); }
+  else alert('❌ Failed to schedule After Visit Call');
+}
+async function updateAvcDate(patientId, newDate) {
+  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_next_call_date: newDate } })
+  });
+}
+async function updateAvcTime(patientId, newTime) {
+  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_preferred_call_time: newTime } })
+  });
+}
+async function cancelAvc(patientId) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_scheduled: false, avc_next_call_date: null, avc_preferred_call_time: null } })
+  });
+  if (res.ok) { alert('✅ After Visit Call cancelled'); loadPatients(); }
+  else alert('❌ Failed to cancel');
+}
+async function markAvcReviewed(patientId) {
+  const patient = allPatients.find(p => p.patient_id === patientId);
+  if (!patient || !patient.latest_avc_call_id) { alert('❌ Could not find AVC call'); return; }
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ call_id: patient.latest_avc_call_id, outcome_status: 'reviewed', outcome_notes: 'AVC summary reviewed by staff', outcome_logged_by: 'staff', followup_required: false })
+  });
+  if (res.ok) loadPatients();
+  else alert('❌ Failed to mark reviewed');
+}
+
+// ─── HISTORY TAB ───
+function renderHistoryPatientList() {
+  const q = (document.getElementById('historyPatientSearch').value || '').toLowerCase();
+  const filtered = allPatients.filter(p =>
+    `${p.patient_first_name} ${p.patient_last_name}`.toLowerCase().includes(q) ||
+    String(p.patient_id).includes(q)
+  );
+  const container = document.getElementById('historyPatientList');
+  if (!filtered.length) { container.innerHTML = '<div class="empty" style="padding:20px;font-size:12px">No patients</div>'; return; }
+  container.innerHTML = filtered.map(p => `
+    <div class="patient-list-item ${selectedHistoryPatient === p.patient_id ? 'active' : ''}" onclick="selectHistoryPatient(${p.patient_id})">
+      <div class="patient-list-name">${p.patient_first_name} ${p.patient_last_name}</div>
+      <div class="patient-list-meta">${p.condition} · ${p.call_number||0} calls</div>
+    </div>
+  `).join('');
+}
+
+function filterHistoryPatients() { renderHistoryPatientList(); }
+
+async function selectHistoryPatient(patientId) {
+  selectedHistoryPatient = patientId;
+  renderHistoryPatientList();
+  const patient = allPatients.find(p => p.patient_id === patientId);
+  document.getElementById('historyMainTitle').textContent = patient ? `${patient.patient_first_name} ${patient.patient_last_name}` : 'Patient';
+  document.getElementById('callListContainer').innerHTML = '<div class="loading" style="padding:20px">Loading calls…</div>';
+  document.getElementById('callDetailContainer').innerHTML = '<div class="no-selection">← Select a call</div>';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-patient-calls?patient_id=${patientId}`);
+    const calls = await res.json();
+    historyAllCalls = calls;
+    filteredCalls = calls;
+    renderCallList(calls);
+  } catch(e) {
+    document.getElementById('callListContainer').innerHTML = '<div class="empty" style="padding:20px;font-size:12px">Failed to load calls</div>';
+  }
+}
+
+function filterCalls() {
+  const q = (document.getElementById('historyCallSearch').value || '').toLowerCase();
+  const type = document.getElementById('historyCallType').value;
+  filteredCalls = historyAllCalls.filter(c => {
+    const matchType = type === 'all' || (type === 'avc' && c.is_avc) || (type === 'ccm' && !c.is_avc);
+    const matchQ = !q || (c.call_summary||'').toLowerCase().includes(q) || new Date(c.created_at).toLocaleDateString().includes(q);
+    return matchType && matchQ;
+  });
+  renderCallList(filteredCalls);
+}
+
+function renderCallList(calls) {
+  const container = document.getElementById('callListContainer');
+  if (!calls || calls.length === 0) { container.innerHTML = '<div class="empty" style="padding:20px;font-size:12px">No calls found</div>'; return; }
+  container.innerHTML = calls.map(call => {
+    const date = new Date(call.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const status = call.overall_status || 'green';
+    const statusColor = status==='red'?'var(--red)':status==='yellow'?'var(--yellow)':'var(--green)';
+    const duration = call.duration_seconds ? `${Math.round(call.duration_seconds/60)}m` : '—';
+    return `<div class="call-list-item" onclick="selectCall('${call.id}')">
+      <div class="call-list-header">
+        <span class="call-list-date">${date}</span>
+        <div class="call-list-badges">
+          <span class="call-type-badge ${call.is_avc?'avc':'ccm'}">${call.is_avc?'AVC':'CCM'}</span>
+          <span style="color:${statusColor};font-size:10px;font-weight:600">${status.toUpperCase()}</span>
+          <span style="color:var(--text-tertiary);font-size:10px">${duration}</span>
+        </div>
+      </div>
+      <div class="call-list-summary">${call.call_summary || 'No summary'}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectCall(callId) {
+  const call = historyAllCalls.find(c => String(c.id) === String(callId));
+  if (!call) return;
+  document.querySelectorAll('.call-list-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget && event.currentTarget.classList.add('active');
+
+  const date = new Date(call.created_at).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  const duration = call.duration_seconds ? `${Math.round(call.duration_seconds/60)} min` : '—';
+  const structured = call.structured_data ? (typeof call.structured_data==='string'?JSON.parse(call.structured_data):call.structured_data) : null;
+  const behavioral = call.behavioral_data ? (typeof call.behavioral_data==='string'?JSON.parse(call.behavioral_data):call.behavioral_data) : null;
+
+  const clinicalFields = [
+    {key:'chest_pain',label:'Chest Pain'},{key:'shortness_of_breath',label:'Shortness of Breath'},
+    {key:'shortness_of_breath_at_rest',label:'SOB at Rest'},{key:'swelling',label:'Swelling'},
+    {key:'swelling_location',label:'Swelling Location'},{key:'weight_stable',label:'Weight Stable'},
+    {key:'weight_change_lbs',label:'Weight Change'},{key:'medication_adherence',label:'Meds Adherence'},
+    {key:'medication_concerns',label:'Med Concerns'},{key:'energy_level',label:'Energy Level'},
+    {key:'dizziness',label:'Dizziness'},{key:'er_visit_since_last_call',label:'ER Visit'},
+    {key:'hospitalization_since_last_call',label:'Hospitalization'},{key:'overall_clinical_impression',label:'Impression'},
+    {key:'additional_concerns',label:'Additional Concerns'},
+  ];
+
+  const clinicalHtml = structured ? `<div class="clinical-detail-grid">
+    ${clinicalFields.filter(f => f.key !== 'additional_concerns').map(f => {
+      const v = structured[f.key];
+      const displayVal = v===null||v===undefined?'—':v===true?'Yes':v===false?'No':v;
+      let cls = '';
+      if (v===true) cls='cv-true'; else if(v===false) cls='cv-false';
+      if (f.key==='overall_clinical_impression') cls = v==='urgent'?'cv-urgent':v==='monitor'?'cv-monitor':v==='stable'?'cv-stable':'';
+      return `<div class="clinical-detail-item"><div class="clinical-detail-key">${f.label}</div><div class="clinical-detail-val ${cls}">${displayVal}</div></div>`;
+    }).join('')}
+  </div>${structured.additional_concerns ? `<div style="font-size:11px;color:var(--text-secondary);margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px">⚠ ${structured.additional_concerns}</div>` : ''}` : '<div style="font-size:11px;color:var(--text-tertiary)">No clinical extraction</div>';
+
+  const sentColor = behavioral?.overall_sentiment==='negative'?'var(--red)':behavioral?.overall_sentiment==='positive'?'var(--green)':'var(--text-primary)';
+  const behavioralHtml = behavioral ? `<div class="behavioral-detail-row">
+    <div class="beh-detail-stat"><div class="beh-detail-val" style="color:${sentColor};font-size:14px">${behavioral.overall_sentiment||'—'}</div><div class="beh-detail-key">Sentiment</div></div>
+    <div class="beh-detail-stat"><div class="beh-detail-val">${behavioral.words_per_minute||'—'}</div><div class="beh-detail-key">Words/Min</div></div>
+    <div class="beh-detail-stat"><div class="beh-detail-val">${behavioral.hesitation_count??'—'}</div><div class="beh-detail-key">Hesitations</div></div>
+    <div class="beh-detail-stat"><div class="beh-detail-val">${behavioral.positive_sentiment_pct??'—'}%</div><div class="beh-detail-key">Positive</div></div>
+    <div class="beh-detail-stat"><div class="beh-detail-val">${behavioral.negative_sentiment_pct??'—'}%</div><div class="beh-detail-key">Negative</div></div>
+    <div class="beh-detail-stat"><div class="beh-detail-val">${behavioral.audio_duration_seconds?Math.round(behavioral.audio_duration_seconds/60)+'m':'—'}</div><div class="beh-detail-key">Duration</div></div>
+  </div>` : '<div style="font-size:11px;color:var(--text-tertiary)">No audio analysis</div>';
+
+  document.getElementById('callDetailContainer').innerHTML = `<div class="call-detail open">
+    <div class="call-detail-header">
+      <div class="call-detail-title">${date}</div>
+      <div class="call-detail-meta">
+        <span class="call-type-badge ${call.is_avc?'avc':'ccm'}" style="font-size:10px">${call.is_avc?'After Visit Care':'CCM Monthly'}</span>
+        <span>${duration}</span>
+        ${call.red_flags_detected ? `<span style="color:var(--red)">🚨 ${call.red_flags_detected}</span>` : ''}
+        ${call.yellow_flags_detected ? `<span style="color:var(--yellow)">⚠️ ${call.yellow_flags_detected}</span>` : ''}
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Summary</div>
+      <div class="summary-box">${call.call_summary || call.avc_call_summary || 'No summary available'}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Clinical Extraction</div>
+      ${clinicalHtml}
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Behavioral Analysis</div>
+      ${behavioralHtml}
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Full Transcript</div>
+      <div class="transcript-box">${call.call_transcript || 'No transcript available'}</div>
+    </div>
+  </div>`;
+}
+
+function goToPatientHistory(patientId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-history').classList.add('active');
+  document.querySelectorAll('.tab-btn')[1].classList.add('active');
+  selectHistoryPatient(patientId);
+}
+
+// ─── MODAL ───
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); clearForm(); }
+function handleOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+function clearForm() {
+  ['firstName','lastName','phoneNumber','physicianName','firstCallDate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('condition').value = '';
+  document.getElementById('csvPreview').textContent = '';
+  document.getElementById('csvSubmit').style.display = 'none';
+  csvPatients = [];
+}
+function switchModalTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
 }
 
 async function addSinglePatient() {
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const phone = document.getElementById("phoneNumber").value.trim();
-  const condition = document.getElementById("condition").value;
-  const physician = document.getElementById("physicianName").value.trim();
-  const callDate = document.getElementById("firstCallDate").value;
-  if (!firstName || !lastName || !phone || !condition || !physician) { alert("Please fill in all required fields"); return; }
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const phone = document.getElementById('phoneNumber').value.trim();
+  const condition = document.getElementById('condition').value;
+  const physician = document.getElementById('physicianName').value.trim();
+  const callDate = document.getElementById('firstCallDate').value;
+  if (!firstName||!lastName||!phone||!condition||!physician) { alert('Please fill in all required fields'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type: "single", patient_first_name: firstName, patient_last_name: lastName, phone_number: phone, condition, physician_name: physician, next_call_date: callDate || null })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'single', patient_first_name: firstName, patient_last_name: lastName, phone_number: phone, condition, physician_name: physician, next_call_date: callDate||null })
   });
-  if (res.ok) { alert(`✅ ${firstName} ${lastName} added successfully`); closeModal(); loadPatients(); }
-  else { const err = await res.json(); alert("❌ Failed to add patient: " + (err.error || "Unknown error")); }
+  if (res.ok) { alert(`✅ ${firstName} ${lastName} added`); closeModal(); loadPatients(); }
+  else { const err = await res.json(); alert('❌ Failed: ' + (err.error||'Unknown error')); }
 }
 
 function downloadTemplate() {
   const csv = "patient_first_name,patient_last_name,phone_number,condition,physician_name,next_call_date\nMargaret,Johnson,+14805551234,CHF,Dr. Abels,2026-07-01\n";
-  const blob = new Blob([csv], { type: "text/csv" });
+  const blob = new Blob([csv],{type:'text/csv'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "orbital_patient_template.csv";
-  a.click();
+  const a = document.createElement('a'); a.href=url; a.download='orbital_patient_template.csv'; a.click();
 }
 
 function handleCSVUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = (e) => {
-    const text = e.target.result;
-    const lines = text.trim().split("\n");
-    const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+    const lines = e.target.result.trim().split('\n');
+    const headers = lines[0].split(',').map(h=>h.trim().toLowerCase());
     csvPatients = lines.slice(1).map(line => {
-      const values = line.split(",").map(v => v.trim());
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = values[i] || "");
-      return obj;
-    }).filter(p => p.patient_first_name || p.first_name);
-    document.getElementById("csvPreview").textContent = `✅ ${csvPatients.length} patients ready to import`;
-    document.getElementById("csvSubmit").style.display = "block";
+      const values = line.split(',').map(v=>v.trim());
+      const obj = {}; headers.forEach((h,i)=>obj[h]=values[i]||''); return obj;
+    }).filter(p=>p.patient_first_name||p.first_name);
+    document.getElementById('csvPreview').textContent = `✅ ${csvPatients.length} patients ready`;
+    document.getElementById('csvSubmit').style.display = 'block';
   };
   reader.readAsText(file);
 }
 
 async function uploadCSV() {
-  if (!csvPatients.length) { alert("No patients to import"); return; }
+  if (!csvPatients.length) { alert('No patients to import'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type: "bulk", patients: csvPatients })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'bulk', patients: csvPatients })
   });
-  if (res.ok) { const data = await res.json(); alert(`✅ ${data.patients_added} patients imported successfully`); closeModal(); loadPatients(); }
-  else { const err = await res.json(); alert("❌ Import failed: " + (err.error || "Unknown error")); }
+  if (res.ok) { const data = await res.json(); alert(`✅ ${data.patients_added} patients imported`); closeModal(); loadPatients(); }
+  else { const err = await res.json(); alert('❌ Import failed: '+(err.error||'Unknown')); }
 }
 
-function toggleSection(header) {
-  const body = header.nextElementSibling;
-  const chevron = header.querySelector(".section-chevron");
-  body.classList.toggle("open");
-  chevron.classList.toggle("open");
-}
-
-async function scheduleAvc(patientId, currentCcmDate, btn) {
-  const today = new Date();
-  const callDate = new Date(today.setDate(today.getDate() + 2))
-    .toISOString()
-    .split("T")[0];
-
-  // Safety check — if AVC date matches CCM date push CCM forward one day
-  if (currentCcmDate && currentCcmDate === callDate) {
-    const ccmDate = new Date(callDate);
-    ccmDate.setDate(ccmDate.getDate() + 1);
-    const newCcmDate = ccmDate.toISOString().split("T")[0];
-    await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "edit",
-        patient_id: patientId,
-        updates: { next_call_date: newCcmDate }
-      })
-    });
-    console.log(`CCM date pushed to ${newCcmDate} to avoid conflict with AVC`);
-  }
-
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: {
-        avc_scheduled: true,
-        avc_next_call_date: callDate
-      }
-    })
-  });
-  if (res.ok) {
-    alert(`✅ After Visit Call scheduled for ${callDate}`);
-    loadPatients();
-  } else {
-    alert("❌ Failed to schedule After Visit Call");
-  }
-}
-
-  async function updateAvcDate(patientId, newDate) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: { avc_next_call_date: newDate }
-    })
-  });
-  if (res.ok) {
-    alert(`✅ AVC call rescheduled to ${newDate}`);
-    loadPatients();
-  } else {
-    alert("❌ Failed to update date");
-  }
-}
-
-async function cancelAvc(patientId) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: {
-        avc_scheduled: false,
-        avc_next_call_date: null,
-        avc_preferred_call_time: null
-      }
-    })
-  });
-  if (res.ok) {
-    alert("✅ After Visit Call cancelled");
-    loadPatients();
-  } else {
-    alert("❌ Failed to cancel");
-  }
-}
-
-async function updateAvcTime(patientId, newTime) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: { avc_preferred_call_time: newTime }
-    })
-  });
-  if (res.ok) {
-    alert(`✅ Call time updated to ${newTime}`);
-    loadPatients();
-  } else {
-    alert("❌ Failed to update time");
-  }
-}
-
-  async function updateCcmDate(patientId, newDate) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: { next_call_date: newDate }
-    })
-  });
-  if (res.ok) {
-    alert(`✅ CCM call rescheduled to ${newDate}`);
-    loadPatients();
-  } else {
-    alert("❌ Failed to update CCM date");
-  }
-}
-
-async function updateCcmTime(patientId, newTime) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "edit",
-      patient_id: patientId,
-      updates: { preferred_call_time: newTime }
-    })
-  });
-  if (res.ok) {
-    alert(`✅ CCM call time updated to ${newTime}`);
-    loadPatients();
-  } else {
-    alert("❌ Failed to update CCM time");
-  }
-}
-
-  async function markAvcReviewed(patientId) {
-  // Find the latest AVC call id from the patient data
-  const patient = allPatients.find(p => p.patient_id === patientId);
-  if (!patient || !patient.latest_avc_call_id) {
-    alert("❌ Could not find AVC call to mark reviewed");
-    return;
-  }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      call_id: patient.latest_avc_call_id,
-      outcome_status: "reviewed",
-      outcome_notes: "AVC summary reviewed by staff",
-      outcome_logged_by: "staff",
-      followup_required: false
-    })
-  });
-  if (res.ok) {
-    loadPatients();
-  } else {
-    alert("❌ Failed to mark as reviewed");
-  }
-}
-  
-setInterval(loadPatients, 60000);
+// ─── INIT ───
 loadPatients();
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 </body>
