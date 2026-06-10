@@ -639,7 +639,7 @@ function renderPatients(patients) {
     const showAvc = patient.avc_unread || (patient.avc_scheduled && patient.avc_next_call_date);
     const avcHtml = showAvc ? `
       ${patient.avc_unread ? `<div class="avc-notification">
-        <span>📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
+        <span>After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
         ${patient.latest_avc_call_id ? `<button class="btn btn-sm btn-outline" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : ''}
       </div>` : ''}
       ${patient.avc_unread && patient.latest_avc_summary ? `<div class="avc-panel">
@@ -680,7 +680,7 @@ function renderPatients(patients) {
       </div>
       <div class="card-body ${isOpen?'open':''}">
         <div class="card-divider"></div>
-        ${hasRedFlags ? `<div class="flags-box red">🚨 ${patient.flag_summary}</div>` : ''}
+        ${hasRedFlags ? `<div class="flags-box red">${patient.flag_summary}</div>` : ''}
         ${hasYellowFlags ? `<div class="flags-box yellow">⚠️ ${patient.flag_summary}</div>` : ''}
         ${noAnswerHtml}
         ${outcomeHtml}
@@ -711,7 +711,7 @@ function renderPatients(patients) {
         <div class="actions-divider">Actions</div>
         <div class="actions">
           <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Now</button>
-          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">📋 Call History</button>
+          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">Call History</button>
           ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'edit-form')">Edit</button>
@@ -1013,7 +1013,7 @@ function selectCall(callId) {
       <div class="call-detail-meta">
         <span class="call-type-badge ${call.is_avc?'avc':'ccm'}" style="font-size:10px">${call.is_avc?'After Visit Care':'CCM Monthly'}</span>
         <span>${duration}</span>
-        ${call.red_flags_detected ? `<span style="color:var(--red)">🚨 ${call.red_flags_detected}</span>` : ''}
+        ${call.red_flags_detected ? `<span style="color:var(--red)">${call.red_flags_detected}</span>` : ''}
         ${call.yellow_flags_detected ? `<span style="color:var(--yellow)">⚠️ ${call.yellow_flags_detected}</span>` : ''}
       </div>
     </div>
