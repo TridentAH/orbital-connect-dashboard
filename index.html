@@ -936,7 +936,7 @@ function filterCalls() {
   filteredCalls = historyAllCalls.filter(c => {
     const matchType = type === 'all' || (type === 'avc' && c.is_avc) || (type === 'ccm' && !c.is_avc);
     const matchQ = !q || (c.call_summary||'').toLowerCase().includes(q);
-    const matchDate = !dateFilter || c.created_at.startsWith(dateFilter);
+    const matchDate = !dateFilter || new Date(c.created_at).toLocaleDateString('en-CA') === dateFilter;
     return matchType && matchQ && matchDate;
   });
   renderCallList(filteredCalls);
