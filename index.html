@@ -903,7 +903,7 @@ function renderHistoryPatientList() {
   container.innerHTML = filtered.map(p => `
     <div class="patient-list-item ${selectedHistoryPatient === p.patient_id ? 'active' : ''}" onclick="selectHistoryPatient(${p.patient_id})">
       <div class="patient-list-name">${p.patient_first_name} ${p.patient_last_name}</div>
-      <div class="patient-list-meta">${p.condition} · ${p.call_number||0} calls</div>
+      <div class="patient-list-meta">${p.condition} · ${p.physician_name}</div>
     </div>
   `).join('');
 }
