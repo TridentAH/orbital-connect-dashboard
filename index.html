@@ -540,11 +540,14 @@ function renderPatients(patients) {
   </div>
   <div class="collapsible-body">
     ${patient.latest_avc_summary ? `
-      <div class="summary-box">${patient.latest_avc_summary}</div>
-      <div style="font-size:11px;color:var(--text-secondary);margin-bottom:12px">
-        ${patient.latest_avc_date ? `Call date: ${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}` : ""}
-      </div>
-    ` : '<div class="summary-box" style="color:var(--text-secondary)">No After Visit Care calls yet</div>'}
+  <div class="summary-box">${patient.latest_avc_summary}</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="font-size:11px;color:var(--text-secondary)">
+      ${patient.latest_avc_date ? `Call date: ${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}` : ""}
+    </div>
+    ${patient.avc_unread ? `<button class="btn btn-outline" style="font-size:11px;padding:4px 10px" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : `<span style="font-size:11px;color:var(--green)">✓ Reviewed</span>`}
+  </div>
+` : '<div class="summary-box" style="color:var(--text-secondary)">No After Visit Care calls yet</div>'}
     ${patient.avc_scheduled && patient.avc_next_call_date ? `
   <div style="margin-bottom:8px">
     <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">AVC Scheduled</div>
@@ -915,6 +918,31 @@ async function updateCcmTime(patientId, newTime) {
     loadPatients();
   } else {
     alert("❌ Failed to update CCM time");
+  }
+}
+
+  async function markAvcReviewed(patientId) {
+  // Find the latest AVC call id from the patient data
+  const patient = allPatients.find(p => p.patient_id === patientId);
+  if (!patient || !patient.latest_avc_call_id) {
+    alert("❌ Could not find AVC call to mark reviewed");
+    return;
+  }
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      call_id: patient.latest_avc_call_id,
+      outcome_status: "reviewed",
+      outcome_notes: "AVC summary reviewed by staff",
+      outcome_logged_by: "staff",
+      followup_required: false
+    })
+  });
+  if (res.ok) {
+    loadPatients();
+  } else {
+    alert("❌ Failed to mark as reviewed");
   }
 }
   
