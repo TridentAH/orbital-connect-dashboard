@@ -1034,6 +1034,13 @@ function selectCall(callId) {
     </div>
 
     <div class="detail-section">
+      <div class="detail-section-title">Recording</div>
+      <div id="recording-${call.id}" style="color:var(--text-tertiary);font-size:12px">
+        <button class="btn btn-outline btn-sm" onclick="loadRecording(${call.id}, 'recording-${call.id}')">▶ Load Recording</button>
+      </div>
+    </div>
+
+    <div class="detail-section">
       <div class="detail-section-title">Full Transcript</div>
       <div class="transcript-box">${call.call_transcript || 'No transcript available'}</div>
     </div>
@@ -1115,6 +1122,23 @@ async function uploadCSV() {
   else { const err = await res.json(); alert('❌ Import failed: '+(err.error||'Unknown')); }
 }
 
+  async function loadRecording(callId, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '<span style="font-size:11px;color:var(--text-tertiary)">Loading recording…</span>';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-recording-url?call_id=${callId}`);
+    const data = await res.json();
+    if (data.url) {
+      container.innerHTML = `<audio controls style="width:100%;margin-top:4px" src="${data.url}"></audio>`;
+    } else {
+      container.innerHTML = '<span style="font-size:11px;color:var(--text-tertiary)">No recording available for this call</span>';
+    }
+  } catch(e) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--text-tertiary)">Failed to load recording</span>';
+  }
+}
+  
 // ─── INIT ───
 loadPatients();
 
