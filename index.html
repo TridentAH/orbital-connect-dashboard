@@ -555,7 +555,7 @@ function renderPatients(patients) {
     <button class="btn btn-danger" onclick="cancelAvc(${patient.patient_id})" style="width:100%">Cancel After Visit Call</button>
   </div>
 ` : `
-  <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, this)" style="width:100%">Schedule After Visit Call</button>
+  <button class="btn btn-outline" onclick="scheduleAvc(${patient.patient_id}, '${patient.next_call_date || ''}', this)" style="width:100%">Schedule After Visit Call</button>
 `}
   </div>
 </div>
@@ -781,15 +781,29 @@ function toggleSection(header) {
   chevron.classList.toggle("open");
 }
 
-async function scheduleAvc(patientId, btn) {
-  if (btn.textContent.includes("Scheduled")) {
-    alert("After Visit Call is already scheduled for this patient.");
-    return;
-  }
+async function scheduleAvc(patientId, currentCcmDate, btn) {
   const today = new Date();
   const callDate = new Date(today.setDate(today.getDate() + 2))
     .toISOString()
     .split("T")[0];
+
+  // Safety check — if AVC date matches CCM date push CCM forward one day
+  if (currentCcmDate && currentCcmDate === callDate) {
+    const ccmDate = new Date(callDate);
+    ccmDate.setDate(ccmDate.getDate() + 1);
+    const newCcmDate = ccmDate.toISOString().split("T")[0];
+    await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "edit",
+        patient_id: patientId,
+        updates: { next_call_date: newCcmDate }
+      })
+    });
+    console.log(`CCM date pushed to ${newCcmDate} to avoid conflict with AVC`);
+  }
+
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -804,9 +818,6 @@ async function scheduleAvc(patientId, btn) {
   });
   if (res.ok) {
     alert(`✅ After Visit Call scheduled for ${callDate}`);
-    btn.textContent = "After Visit Call Scheduled ✓";
-    btn.style.color = "var(--green)";
-    btn.style.borderColor = "var(--green-border)";
     loadPatients();
   } else {
     alert("❌ Failed to schedule After Visit Call");
