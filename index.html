@@ -343,7 +343,7 @@
     .call-list-summary { font-size: 11px; color: var(--text-secondary); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
     /* ─── CALL DETAIL PANEL ─── */
-    .call-detail { padding: 18px; overflow-y: auto; display: none; }
+    .call-detail { padding: 18px; overflow-y: auto; display: none; height: 100%; }
     .call-detail.open { display: block; }
     .call-detail-header { margin-bottom: 16px; }
     .call-detail-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
@@ -450,7 +450,7 @@
           <div id="callListContainer" style="border-right:1px solid var(--border);overflow-y:auto">
             <div class="no-selection">← Select a patient</div>
           </div>
-          <div id="callDetailContainer">
+          <div id="callDetailContainer" style="overflow-y:auto;height:calc(100vh - 200px)">
             <div class="no-selection">← Select a call</div>
           </div>
         </div>
