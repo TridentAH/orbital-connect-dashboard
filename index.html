@@ -517,7 +517,20 @@ function renderPatients(patients) {
     ${renderCallHistory(patient.call_history)}
   </div>
 </div>
-
+<div class="collapsible-section">
+  <div class="collapsible-header" onclick="toggleSection(this)">
+    <span>CCM Schedule</span>
+    <span class="section-chevron">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Next Scheduled CCM Call</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input type="date" value="${patient.next_call_date || ''}" onchange="updateCcmDate(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
+      <input type="time" value="${patient.preferred_call_time || '10:00'}" onchange="updateCcmTime(${patient.patient_id}, this.value)" style="margin-bottom:0;flex:1">
+    </div>
+    <div style="font-size:11px;color:var(--text-secondary)">Changing the date or time here updates the next scheduled CCM call for this patient.</div>
+  </div>
+</div>
         ${patient.avc_unread ? `<div class="avc-notification">📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}</strong></div>` : ""}
 
 <div class="collapsible-section">
@@ -858,6 +871,42 @@ async function updateAvcTime(patientId, newTime) {
   }
 }
 
+  async function updateCcmDate(patientId, newDate) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: { next_call_date: newDate }
+    })
+  });
+  if (res.ok) {
+    alert(`✅ CCM call rescheduled to ${newDate}`);
+    loadPatients();
+  } else {
+    alert("❌ Failed to update CCM date");
+  }
+}
+
+async function updateCcmTime(patientId, newTime) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "edit",
+      patient_id: patientId,
+      updates: { preferred_call_time: newTime }
+    })
+  });
+  if (res.ok) {
+    alert(`✅ CCM call time updated to ${newTime}`);
+    loadPatients();
+  } else {
+    alert("❌ Failed to update CCM time");
+  }
+}
+  
 setInterval(loadPatients, 60000);
 loadPatients();
 
