@@ -438,6 +438,7 @@
           <div class="history-main-title" id="historyMainTitle">Select a patient</div>
           <div class="history-filters">
             <input type="text" class="history-search" id="historyCallSearch" placeholder="Search calls…" oninput="filterCalls()">
+            <input type="date" class="filter-select" id="historyDateFilter" onchange="filterCalls()">
             <select class="filter-select" id="historyCallType" onchange="filterCalls()">
               <option value="all">All types</option>
               <option value="ccm">CCM only</option>
@@ -590,6 +591,8 @@ function renderCompactBehavioral(behavioral) {
     <div class="beh-stat"><div class="beh-val" style="color:${sentColor};font-size:12px">${behavioral.overall_sentiment||'—'}</div><div class="beh-key">Sentiment</div></div>
     <div class="beh-stat"><div class="beh-val">${behavioral.words_per_minute||'—'}</div><div class="beh-key">WPM</div></div>
     <div class="beh-stat"><div class="beh-val">${behavioral.hesitation_count??'—'}</div><div class="beh-key">Hesitations</div></div>
+    <div class="beh-stat"><div class="beh-val">${behavioral.positive_sentiment_pct??'—'}%</div><div class="beh-key">Positive</div></div>
+    <div class="beh-stat"><div class="beh-val">${behavioral.negative_sentiment_pct??'—'}%</div><div class="beh-key">Negative</div></div>
     <div class="beh-stat"><div class="beh-val">${behavioral.audio_duration_seconds ? Math.round(behavioral.audio_duration_seconds/60)+'m' : '—'}</div><div class="beh-key">Duration</div></div>
   </div>`;
 }
@@ -636,12 +639,12 @@ function renderPatients(patients) {
     const showAvc = patient.avc_unread || (patient.avc_scheduled && patient.avc_next_call_date);
     const avcHtml = showAvc ? `
       ${patient.avc_unread ? `<div class="avc-notification">
-        <span>📋 After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
+        <span>After Visit Care summary ready — <strong>${new Date(patient.latest_avc_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</strong><span class="avc-badge">NEW</span></span>
         ${patient.latest_avc_call_id ? `<button class="btn btn-sm btn-outline" onclick="markAvcReviewed(${patient.patient_id})">✓ Mark Reviewed</button>` : ''}
       </div>` : ''}
       ${(patient.avc_scheduled && patient.avc_next_call_date) ? `<div class="avc-panel">
         <div class="avc-panel-label">AVC Scheduled</div>
-        ${patient.latest_avc_summary && patient.avc_unread ? `<div class="summary-box" style="margin-bottom:8px">${patient.latest_avc_summary}</div>` : ''}
+        ${patient.latest_avc_summary ? `<div class="summary-box" style="margin-bottom:8px">${patient.latest_avc_summary}</div>` : ''}
         <div class="date-time-row" style="margin-bottom:8px">
           <input type="date" value="${patient.avc_next_call_date||''}" onchange="updateAvcDate(${patient.patient_id},this.value)">
           <input type="time" value="${patient.avc_preferred_call_time||'10:00'}" onchange="updateAvcTime(${patient.patient_id},this.value)">
@@ -705,7 +708,7 @@ function renderPatients(patients) {
         <div class="actions-divider">Actions</div>
         <div class="actions">
           <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Now</button>
-          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">📋 Call History</button>
+          <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">Call History</button>
           ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'edit-form')">Edit</button>
@@ -926,10 +929,12 @@ async function selectHistoryPatient(patientId) {
 function filterCalls() {
   const q = (document.getElementById('historyCallSearch').value || '').toLowerCase();
   const type = document.getElementById('historyCallType').value;
+  const dateFilter = document.getElementById('historyDateFilter').value;
   filteredCalls = historyAllCalls.filter(c => {
     const matchType = type === 'all' || (type === 'avc' && c.is_avc) || (type === 'ccm' && !c.is_avc);
-    const matchQ = !q || (c.call_summary||'').toLowerCase().includes(q) || new Date(c.created_at).toLocaleDateString().includes(q);
-    return matchType && matchQ;
+    const matchQ = !q || (c.call_summary||'').toLowerCase().includes(q);
+    const matchDate = !dateFilter || c.created_at.startsWith(dateFilter);
+    return matchType && matchQ && matchDate;
   });
   renderCallList(filteredCalls);
 }
