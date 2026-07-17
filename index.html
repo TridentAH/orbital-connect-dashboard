@@ -488,6 +488,7 @@
         </select>
       </div>
       <div class="form-group"><label class="form-label">Physician</label><input type="text" id="physicianName" placeholder="e.g. Dr. Abels"></div>
+      <div class="form-group"><label class="form-label">Physician Email</label><input type="text" id="physicianEmail" placeholder="e.g. dr.abels@clinic.com"></div>
       <div class="form-group"><label class="form-label">First Call Date</label><input type="date" id="firstCallDate"></div>
       <button class="form-submit" onclick="addSinglePatient()">Add Patient</button>
     </div>
@@ -740,6 +741,7 @@ function renderPatients(patients) {
             <option value="Other" ${patient.condition==='Other'?'selected':''}>Other</option>
           </select>
           <input type="text" class="edit-physician" placeholder="Physician" value="${patient.physician_name}">
+          <input type="text" class="edit-physician-email" placeholder="Physician email" value="${patient.physician_email||''}">
           <input type="date" class="edit-next-call" value="${patient.next_call_date||''}">
           <button class="form-submit-blue" onclick="editPatient(this,${patient.patient_id})">Save Changes</button>
         </div>
@@ -802,6 +804,7 @@ async function editPatient(btn, patientId) {
     phone_number: form.querySelector('.edit-phone').value.trim(),
     condition: form.querySelector('.edit-condition').value,
     physician_name: form.querySelector('.edit-physician').value.trim(),
+    physician_email: form.querySelector('.edit-physician-email').value.trim() || null,
     next_call_date: form.querySelector('.edit-next-call').value || null
   };
   if (!updates.patient_first_name || !updates.patient_last_name || !updates.phone_number) { alert('Please fill in all required fields'); return; }
@@ -1060,7 +1063,7 @@ function openModal() { document.getElementById('modalOverlay').classList.add('op
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); clearForm(); }
 function handleOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 function clearForm() {
-  ['firstName','lastName','phoneNumber','physicianName','firstCallDate'].forEach(id => document.getElementById(id).value = '');
+  ['firstName','lastName','phoneNumber','physicianName','physicianEmail','firstCallDate'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('condition').value = '';
   document.getElementById('csvPreview').textContent = '';
   document.getElementById('csvSubmit').style.display = 'none';
@@ -1079,12 +1082,14 @@ async function addSinglePatient() {
   const phone = document.getElementById('phoneNumber').value.trim();
   const condition = document.getElementById('condition').value;
   const physician = document.getElementById('physicianName').value.trim();
-  const callDate = document.getElementById('firstCallDate').value;
-  if (!firstName||!lastName||!phone||!condition||!physician) { alert('Please fill in all required fields'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'single', patient_first_name: firstName, patient_last_name: lastName, phone_number: phone, condition, physician_name: physician, next_call_date: callDate||null })
-  });
+ const physician = document.getElementById('physicianName').value.trim();
+const physicianEmail = document.getElementById('physicianEmail').value.trim();
+const callDate = document.getElementById('firstCallDate').value;
+if (!firstName||!lastName||!phone||!condition||!physician) { alert('Please fill in all required fields'); return; }
+const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+  method: 'POST', headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ type: 'single', patient_first_name: firstName, patient_last_name: lastName, phone_number: phone, condition, physician_name: physician, physician_email: physicianEmail||null, next_call_date: callDate||null })
+});
   if (res.ok) { alert(`✅ ${firstName} ${lastName} added`); closeModal(); loadPatients(); }
   else { const err = await res.json(); alert('❌ Failed: ' + (err.error||'Unknown error')); }
 }
