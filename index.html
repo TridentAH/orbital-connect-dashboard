@@ -415,7 +415,8 @@
     </div>
 
     <div class="search-row">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search by name, condition, or physician…" oninput="filterPatients()">
+      <!-- BRIDGE MODE: search by patient #, condition, or physician — no names in Supabase to search by -->
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search by patient #, condition, or physician…" oninput="filterPatients()">
     </div>
 
     <div class="section-label">Patient Priority Queue</div>
@@ -428,7 +429,7 @@
       <div class="history-sidebar">
         <div class="history-sidebar-header">
           <div class="history-sidebar-title">Patients</div>
-          <input type="text" class="search-input" id="historyPatientSearch" placeholder="Search…" oninput="filterHistoryPatients()" style="font-size:11px;padding:6px 10px;margin-bottom:0">
+          <input type="text" class="search-input" id="historyPatientSearch" placeholder="Search by patient #…" oninput="filterHistoryPatients()" style="font-size:11px;padding:6px 10px;margin-bottom:0">
         </div>
         <div id="historyPatientList"><div class="loading" style="padding:20px">Loading…</div></div>
       </div>
@@ -461,6 +462,9 @@
 </main>
 
 <!-- ─── ADD PATIENT MODAL ─── -->
+<!-- BRIDGE MODE: First Name / Last Name / Phone Number fields removed entirely.
+     Real identity is entered only in Cloutier's local app, paired with the
+     patient ID this form returns after you submit. -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-header">
@@ -472,9 +476,6 @@
       <button class="modal-tab" onclick="switchModalTab('bulk',this)">Bulk CSV</button>
     </div>
     <div class="tab-content active" id="tab-single">
-      <div class="form-group"><label class="form-label">First Name</label><input type="text" id="firstName" placeholder="e.g. Margaret"></div>
-      <div class="form-group"><label class="form-label">Last Name</label><input type="text" id="lastName" placeholder="e.g. Johnson"></div>
-      <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="phoneNumber" placeholder="+14805551234"></div>
       <div class="form-group">
         <label class="form-label">Condition</label>
         <select id="condition">
@@ -491,6 +492,7 @@
       <div class="form-group"><label class="form-label">Physician Email</label><input type="text" id="physicianEmail" placeholder="e.g. dr.abels@clinic.com"></div>
       <div class="form-group"><label class="form-label">First Call Date</label><input type="date" id="firstCallDate"></div>
       <button class="form-submit" onclick="addSinglePatient()">Add Patient</button>
+      <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px">After adding, you'll get a patient #. Pair that number with the patient's real name and phone in the local app on Cloutier's computer.</p>
     </div>
     <div class="tab-content" id="tab-bulk">
       <span class="csv-template" onclick="downloadTemplate()">⬇ Download CSV Template</span>
@@ -540,10 +542,11 @@ async function loadPatients() {
 function manualRefresh() { loadPatients(); }
 
 // ─── FILTER ───
+// BRIDGE MODE: search by patient ID / condition / physician — no name field to search.
 function filterPatients() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const filtered = allPatients.filter(p =>
-    `${p.patient_first_name} ${p.patient_last_name}`.toLowerCase().includes(q) ||
+    String(p.patient_id).includes(q) ||
     (p.condition||'').toLowerCase().includes(q) ||
     (p.physician_name||'').toLowerCase().includes(q)
   );
@@ -665,7 +668,8 @@ function renderPatients(patients) {
     card.innerHTML = `
       <div class="card-header" onclick="toggleCard(this)">
         <div style="flex:1">
-          <div class="patient-name">${patient.patient_first_name} ${patient.patient_last_name}</div>
+          <!-- BRIDGE MODE: shows patient # instead of name — Supabase never holds the name -->
+          <div class="patient-name">Patient #${patient.patient_id}</div>
           <div class="patient-meta">
             <span>${patient.condition}</span>
             <span>${patient.physician_name}</span>
@@ -711,7 +715,8 @@ function renderPatients(patients) {
 
         <div class="actions-divider">Actions</div>
         <div class="actions">
-          <button class="btn btn-primary" onclick="callPatient(${patient.patient_id})">Call Now</button>
+          <!-- BRIDGE MODE: "Call Now" removed — Supabase no longer holds a phone number
+               to call. Calling happens from the local app on Cloutier's computer instead. -->
           <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">Call History</button>
           ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
@@ -727,11 +732,9 @@ function renderPatients(patients) {
           <button class="form-submit-green" onclick="logOutcome(this,${patient.patient_id})">Save Outcome</button>
         </div>
 
+        <!-- BRIDGE MODE: Edit form — name/phone fields removed, only condition/physician/date editable -->
         <div class="inline-form edit-form">
           <h4>Edit Patient</h4>
-          <input type="text" class="edit-first-name" placeholder="First name" value="${patient.patient_first_name}">
-          <input type="text" class="edit-last-name" placeholder="Last name" value="${patient.patient_last_name}">
-          <input type="tel" class="edit-phone" placeholder="Phone" value="${patient.phone_number||''}">
           <select class="edit-condition">
             <option value="CHF" ${patient.condition==='CHF'?'selected':''}>CHF</option>
             <option value="Diabetes" ${patient.condition==='Diabetes'?'selected':''}>Diabetes</option>
@@ -746,12 +749,13 @@ function renderPatients(patients) {
           <button class="form-submit-blue" onclick="editPatient(this,${patient.patient_id})">Save Changes</button>
         </div>
 
+        <!-- BRIDGE MODE: Delete confirmation — confirm by patient ID, not name -->
         <div class="inline-form delete-form">
           <h4>Remove Patient</h4>
-          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">This permanently deletes <strong>${patient.patient_first_name} ${patient.patient_last_name}</strong> and all their records. This cannot be undone.</p>
-          <p style="font-size:11px;color:var(--red);margin-bottom:6px">Type the patient's full name to confirm:</p>
-          <input type="text" class="delete-confirm-input" placeholder="${patient.patient_first_name} ${patient.patient_last_name}">
-          <button class="form-submit-red" onclick="deletePatient(this,${patient.patient_id},'${patient.patient_first_name} ${patient.patient_last_name}')">Permanently Remove</button>
+          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">This permanently deletes <strong>Patient #${patient.patient_id}</strong> and all their records. This cannot be undone.</p>
+          <p style="font-size:11px;color:var(--red);margin-bottom:6px">Type the patient's ID number (${patient.patient_id}) to confirm:</p>
+          <input type="text" class="delete-confirm-input" placeholder="${patient.patient_id}">
+          <button class="form-submit-red" onclick="deletePatient(this,${patient.patient_id})">Permanently Remove</button>
         </div>
       </div>
     `;
@@ -775,6 +779,8 @@ function toggleForm(btn, formClass) {
 }
 
 // ─── PATIENT ACTIONS ───
+// BRIDGE MODE: callPatient() is no longer wired to any button (Call Now was removed
+// from the actions row above) — left here unused/harmless in case Full Mode is restored.
 async function callPatient(patientId) {
   const res = await fetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
   if (res.ok) alert('✅ Call started successfully');
@@ -796,18 +802,16 @@ async function logOutcome(btn, patientId) {
   else alert('❌ Failed to log outcome');
 }
 
+// BRIDGE MODE: no longer sends/requires name or phone — only condition/physician/date
 async function editPatient(btn, patientId) {
   const form = btn.closest('.inline-form');
   const updates = {
-    patient_first_name: form.querySelector('.edit-first-name').value.trim(),
-    patient_last_name: form.querySelector('.edit-last-name').value.trim(),
-    phone_number: form.querySelector('.edit-phone').value.trim(),
     condition: form.querySelector('.edit-condition').value,
     physician_name: form.querySelector('.edit-physician').value.trim(),
     physician_email: form.querySelector('.edit-physician-email').value.trim() || null,
     next_call_date: form.querySelector('.edit-next-call').value || null
   };
-  if (!updates.patient_first_name || !updates.patient_last_name || !updates.phone_number) { alert('Please fill in all required fields'); return; }
+  if (!updates.condition || !updates.physician_name) { alert('Please fill in all required fields'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates })
@@ -816,18 +820,19 @@ async function editPatient(btn, patientId) {
   else alert('❌ Failed to update patient');
 }
 
-async function deletePatient(btn, patientId, fullName) {
+// BRIDGE MODE: confirm by patient ID instead of full name
+async function deletePatient(btn, patientId) {
   const form = btn.closest('.inline-form');
-  const confirmName = form.querySelector('.delete-confirm-input').value.trim();
-  if (!confirmName) { alert('Please type the full name to confirm'); return; }
+  const confirmId = form.querySelector('.delete-confirm-input').value.trim();
+  if (!confirmId) { alert('Please type the patient ID to confirm'); return; }
   const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'delete', patient_id: patientId, confirm_name: confirmName })
+    body: JSON.stringify({ type: 'delete', patient_id: patientId, confirm_id: confirmId })
   });
   if (res.ok) { alert('✅ Patient removed'); loadPatients(); }
   else {
     const err = await res.json();
-    alert(err.error === 'Name confirmation does not match' ? '❌ Name doesn\'t match' : '❌ Failed to remove patient');
+    alert(err.error === 'ID confirmation does not match' ? '❌ ID doesn\'t match' : '❌ Failed to remove patient');
   }
 }
 
@@ -895,17 +900,15 @@ async function markAvcReviewed(patientId) {
 }
 
 // ─── HISTORY TAB ───
+// BRIDGE MODE: shows patient # instead of name
 function renderHistoryPatientList() {
   const q = (document.getElementById('historyPatientSearch').value || '').toLowerCase();
-  const filtered = allPatients.filter(p =>
-    `${p.patient_first_name} ${p.patient_last_name}`.toLowerCase().includes(q) ||
-    String(p.patient_id).includes(q)
-  );
+  const filtered = allPatients.filter(p => String(p.patient_id).includes(q));
   const container = document.getElementById('historyPatientList');
   if (!filtered.length) { container.innerHTML = '<div class="empty" style="padding:20px;font-size:12px">No patients</div>'; return; }
   container.innerHTML = filtered.map(p => `
     <div class="patient-list-item ${selectedHistoryPatient === p.patient_id ? 'active' : ''}" onclick="selectHistoryPatient(${p.patient_id})">
-      <div class="patient-list-name">${p.patient_first_name} ${p.patient_last_name}</div>
+      <div class="patient-list-name">Patient #${p.patient_id}</div>
       <div class="patient-list-meta">${p.condition} · ${p.physician_name}</div>
     </div>
   `).join('');
@@ -917,7 +920,8 @@ async function selectHistoryPatient(patientId) {
   selectedHistoryPatient = patientId;
   renderHistoryPatientList();
   const patient = allPatients.find(p => p.patient_id === patientId);
-  document.getElementById('historyMainTitle').textContent = patient ? `${patient.patient_first_name} ${patient.patient_last_name}` : 'Patient';
+  // BRIDGE MODE: title shows patient # instead of name
+  document.getElementById('historyMainTitle').textContent = patient ? `Patient #${patient.patient_id}` : 'Patient';
   document.getElementById('callListContainer').innerHTML = '<div class="loading" style="padding:20px">Loading calls…</div>';
   document.getElementById('callDetailContainer').innerHTML = '<div class="no-selection">← Select a call</div>';
 
@@ -1043,6 +1047,8 @@ function selectCall(callId) {
       </div>
     </div>
 
+    <!-- BRIDGE MODE: this will show "No transcript available" going forward — that's
+         expected, not a bug. Supabase no longer stores the transcript. -->
     <div class="detail-section">
       <div class="detail-section-title">Full Transcript</div>
       <div class="transcript-box">${call.call_transcript || 'No transcript available'}</div>
@@ -1062,8 +1068,9 @@ function goToPatientHistory(patientId) {
 function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); clearForm(); }
 function handleOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+// BRIDGE MODE: only clears fields that still exist in the form (no firstName/lastName/phoneNumber)
 function clearForm() {
-  ['firstName','lastName','phoneNumber','physicianName','physicianEmail','firstCallDate'].forEach(id => document.getElementById(id).value = '');
+  ['physicianName','physicianEmail','firstCallDate'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('condition').value = '';
   document.getElementById('csvPreview').textContent = '';
   document.getElementById('csvSubmit').style.display = 'none';
@@ -1076,30 +1083,35 @@ function switchModalTab(tab, btn) {
   document.getElementById(`tab-${tab}`).classList.add('active');
 }
 
+// BRIDGE MODE: no name/phone collected or sent. After success, shows the new patient ID
+// so you can pair it with the real name/phone in the local app.
 async function addSinglePatient() {
-  const firstName = document.getElementById('firstName').value.trim();
-  const lastName = document.getElementById('lastName').value.trim();
-  const phone = document.getElementById('phoneNumber').value.trim();
   const condition = document.getElementById('condition').value;
   const physician = document.getElementById('physicianName').value.trim();
-const physicianEmail = document.getElementById('physicianEmail').value.trim();
-const callDate = document.getElementById('firstCallDate').value;
-if (!firstName||!lastName||!phone||!condition||!physician) { alert('Please fill in all required fields'); return; }
-const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
-  method: 'POST', headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ type: 'single', patient_first_name: firstName, patient_last_name: lastName, phone_number: phone, condition, physician_name: physician, physician_email: physicianEmail||null, next_call_date: callDate||null })
-});
-  if (res.ok) { alert(`✅ ${firstName} ${lastName} added`); closeModal(); loadPatients(); }
+  const physicianEmail = document.getElementById('physicianEmail').value.trim();
+  const callDate = document.getElementById('firstCallDate').value;
+  if (!condition||!physician) { alert('Please fill in all required fields'); return; }
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'single', condition, physician_name: physician, physician_email: physicianEmail||null, next_call_date: callDate||null })
+  });
+  if (res.ok) {
+    const data = await res.json();
+    alert(`✅ Patient added — ID is #${data.patient.id}. Write this number down and pair it with the real name/phone in the local app.`);
+    closeModal(); loadPatients();
+  }
   else { const err = await res.json(); alert('❌ Failed: ' + (err.error||'Unknown error')); }
 }
 
+// BRIDGE MODE: CSV template no longer has name/phone columns
 function downloadTemplate() {
-  const csv = "patient_first_name,patient_last_name,phone_number,condition,physician_name,next_call_date\nMargaret,Johnson,+14805551234,CHF,Dr. Abels,2026-07-01\n";
+  const csv = "condition,physician_name,physician_email,next_call_date\nCHF,Dr. Abels,dr.abels@clinic.com,2026-07-01\n";
   const blob = new Blob([csv],{type:'text/csv'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href=url; a.download='orbital_patient_template.csv'; a.click();
 }
 
+// BRIDGE MODE: a valid row just needs a condition — no name to check for
 function handleCSVUpload(event) {
   const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
@@ -1109,7 +1121,7 @@ function handleCSVUpload(event) {
     csvPatients = lines.slice(1).map(line => {
       const values = line.split(',').map(v=>v.trim());
       const obj = {}; headers.forEach((h,i)=>obj[h]=values[i]||''); return obj;
-    }).filter(p=>p.patient_first_name||p.first_name);
+    }).filter(p=>p.condition);
     document.getElementById('csvPreview').textContent = `✅ ${csvPatients.length} patients ready`;
     document.getElementById('csvSubmit').style.display = 'block';
   };
@@ -1122,7 +1134,12 @@ async function uploadCSV() {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'bulk', patients: csvPatients })
   });
-  if (res.ok) { const data = await res.json(); alert(`✅ ${data.patients_added} patients imported`); closeModal(); loadPatients(); }
+  if (res.ok) {
+    const data = await res.json();
+    const ids = (data.patients||[]).map(p=>p.id).join(', ');
+    alert(`✅ ${data.patients_added} patients imported. IDs: ${ids}. Pair these with real names/phones in the local app.`);
+    closeModal(); loadPatients();
+  }
   else { const err = await res.json(); alert('❌ Import failed: '+(err.error||'Unknown')); }
 }
 
@@ -1142,7 +1159,7 @@ async function uploadCSV() {
     container.innerHTML = '<span style="font-size:11px;color:var(--text-tertiary)">Failed to load recording</span>';
   }
 }
-  
+
 // ─── INIT ───
 loadPatients();
 
