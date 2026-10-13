@@ -832,7 +832,7 @@ function renderPatients(patients) {
                to call. Calling happens from the local app on Cloutier's computer instead. -->
           <button class="btn btn-ghost btn-sm" onclick="goToPatientHistory(${patient.patient_id})">Call History</button>
           ${!showAvc ? `<button class="btn btn-ghost btn-sm" onclick="scheduleAvc(${patient.patient_id},'${patient.next_call_date||''}',this)">📅 Schedule AVC</button>` : ''}
-          <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>
+          ${patient.outcome_status ? '' : `<button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'outcome-form')">Log Outcome</button>`}
           <button class="btn btn-ghost btn-sm" onclick="toggleForm(this,'edit-form')">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="toggleForm(this,'delete-form')">Remove</button>
         </div>
@@ -907,10 +907,15 @@ async function logOutcome(btn, patientId) {
   const res = await apiFetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ call_id: patientId, outcome_status: status, outcome_notes: null, outcome_logged_by: loggedBy || 'staff', followup_required: false })
+    body: JSON.stringify({ patient_id: patientId, outcome_status: status, outcome_notes: null, outcome_logged_by: loggedBy || 'staff', followup_required: false })
   });
   if (res.ok) { alert('✅ Outcome logged'); form.classList.remove('open'); loadPatients(); }
-  else alert('❌ Failed to log outcome');
+  else {
+    if (res.status === 409) alert("⚠️ An outcome was already logged for this patient's latest call. It can't be logged twice.");
+    else if (res.status === 404) alert('⚠️ No call found for this patient yet, so there is nothing to log an outcome on.');
+    else alert('❌ Failed to log outcome');
+    loadPatients();
+  }
 }
 
 // BRIDGE MODE: no longer sends/requires name or phone — only condition/physician/date
