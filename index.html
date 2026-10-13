@@ -379,9 +379,36 @@
     @media (max-width: 500px) {
       .chips-row .chip-key { display: none; }
     }
+
+    /* ─── LOGIN SCREEN ─── */
+    #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px 24px; }
+    .login-card h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .login-card .login-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 18px; }
+    .login-card label { display: block; font-size: 11px; color: var(--text-secondary); margin: 10px 0 4px; }
+    .login-card input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); font-size: 14px; font-family: inherit; }
+    .login-card button { width: 100%; margin-top: 16px; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
+    .login-card button:hover { background: var(--accent-hover); }
+    #loginError { color: var(--red); font-size: 12px; min-height: 16px; margin-top: 10px; }
+    .login-note { font-size: 10px; color: var(--text-tertiary); margin-top: 14px; line-height: 1.5; }
   </style>
 </head>
 <body>
+
+<!-- ─── LOGIN SCREEN (nothing loads until signed in) ─── -->
+<div id="loginOverlay">
+  <form class="login-card" onsubmit="doLogin(); return false;">
+    <h2>Orbital Connect</h2>
+    <div class="login-sub">Between Visits Care — staff sign in</div>
+    <label for="loginEmail">Email</label>
+    <input type="email" id="loginEmail" autocomplete="username" required>
+    <label for="loginPassword">Password</label>
+    <input type="password" id="loginPassword" autocomplete="current-password" required>
+    <button type="submit" id="loginBtn">Sign in</button>
+    <div id="loginError"></div>
+    <div class="login-note">Authorized users only. Activity is logged. You are signed out automatically after 20 minutes of no activity.</div>
+  </form>
+</div>
 
 <header>
   <div class="logo">
@@ -398,9 +425,11 @@
   </div>
 
   <div class="header-right">
+    <span class="last-updated" id="whoami"></span>
     <span class="last-updated" id="lastUpdated">—</span>
     <button class="btn-header" onclick="manualRefresh()">↻ Refresh</button>
     <button class="btn-header primary" onclick="openModal()">+ Add Patient</button>
+    <button class="btn-header" onclick="signOut()">Sign out</button>
   </div>
 </header>
 
@@ -510,6 +539,90 @@
 
 <script>
 const SUPABASE_URL = "https://oomjzfqecnkshvfgmjqb.supabase.co";
+// Public key: safe to be in website code. Never put the secret/service_role key here.
+const SUPABASE_ANON_KEY = "sb_publishable_0w4ezjZQEsdlD6JdEln2gA_uUDBInQK";
+const IDLE_MINUTES = 20;
+
+// ─── LOGIN / SESSION ───
+let authSession = null;
+let idleTimer = null;
+
+function saveSession() { try { sessionStorage.setItem('oc_session', JSON.stringify(authSession)); } catch(e) {} }
+function loadSession() { try { const s = sessionStorage.getItem('oc_session'); authSession = s ? JSON.parse(s) : null; } catch(e) { authSession = null; } }
+function clearSession() { authSession = null; try { sessionStorage.removeItem('oc_session'); } catch(e) {} }
+
+function showLogin(msg) {
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('loginError').textContent = msg || '';
+  document.getElementById('loginPassword').value = '';
+}
+
+async function authRequest(grant, body) {
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=${grant}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error('auth failed');
+  authSession = {
+    access_token: data.access_token,
+    refresh_token: data.refresh_token,
+    expires_at: Date.now() + (data.expires_in || 3600) * 1000,
+    email: (data.user && data.user.email) || (authSession && authSession.email) || ''
+  };
+  saveSession();
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    await authRequest('password', { email, password });
+    document.getElementById('loginPassword').value = '';
+    startApp();
+  } catch (e) {
+    showLogin('Wrong email or password.');
+  }
+  btn.disabled = false; btn.textContent = 'Sign in';
+}
+
+async function getToken() {
+  if (!authSession) return null;
+  if (Date.now() > authSession.expires_at - 60000) {
+    try { await authRequest('refresh_token', { refresh_token: authSession.refresh_token }); }
+    catch (e) { clearSession(); return null; }
+  }
+  return authSession.access_token;
+}
+
+// Every call to the backend goes through here so it carries the staff login.
+async function apiFetch(url, opts = {}) {
+  const token = await getToken();
+  if (!token) { showLogin('Please sign in again.'); throw new Error('Not signed in'); }
+  const headers = Object.assign({}, opts.headers || {}, { 'Authorization': 'Bearer ' + token, 'apikey': SUPABASE_ANON_KEY });
+  const res = await fetch(url, Object.assign({}, opts, { headers }));
+  if (res.status === 401) { clearSession(); showLogin('Your session ended. Please sign in again.'); }
+  return res;
+}
+
+function signOut() { clearSession(); location.reload(); }
+
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { clearSession(); location.reload(); }, IDLE_MINUTES * 60 * 1000);
+}
+
+function startApp() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('whoami').textContent = authSession && authSession.email ? authSession.email : '';
+  ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(ev => document.addEventListener(ev, resetIdleTimer, { passive: true }));
+  resetIdleTimer();
+  loadPatients();
+}
+
 let allPatients = [];
 let csvPatients = [];
 let historyAllCalls = [];
@@ -528,7 +641,7 @@ function switchView(view, btn) {
 // ─── DATA LOADING ───
 async function loadPatients() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-dashboard-data`);
+    const res = await apiFetch(`${SUPABASE_URL}/functions/v1/get-dashboard-data`);
     const data = await res.json();
     allPatients = data;
     document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
@@ -691,7 +804,7 @@ function renderPatients(patients) {
         ${outcomeHtml}
 
         <div class="summary-label">Latest Call Summary</div>
-        <div class="summary-box">${patient.latest_summary || 'No calls yet'}</div>
+        <div class="summary-box">${patient.latest_summary || (patient.last_call_date ? 'Summary not stored in Bridge Mode — see the flags above' : 'No calls yet')}</div>
 
         <div class="inline-data-section">
           <div class="inline-data-label">Clinical</div>
@@ -727,7 +840,6 @@ function renderPatients(patients) {
         <div class="inline-form outcome-form">
           <h4>Log Outcome</h4>
           <select class="outcome-status-select"><option value="">Select outcome…</option><option value="stable">Stable — no action needed</option><option value="physician_notified">Physician notified</option><option value="er_visit">ER visit</option><option value="hospitalized">Hospitalized</option><option value="no_followup">No follow-up needed</option></select>
-          <textarea placeholder="Notes (optional)" rows="2" class="outcome-notes"></textarea>
           <input type="text" placeholder="Your name" class="outcome-logged-by">
           <button class="form-submit-green" onclick="logOutcome(this,${patient.patient_id})">Save Outcome</button>
         </div>
@@ -782,7 +894,7 @@ function toggleForm(btn, formClass) {
 // BRIDGE MODE: callPatient() is no longer wired to any button (Call Now was removed
 // from the actions row above) — left here unused/harmless in case Full Mode is restored.
 async function callPatient(patientId) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/start-batch-call?patient_id=${patientId}`);
   if (res.ok) alert('✅ Call started successfully');
   else alert('❌ Call failed — check connection');
 }
@@ -790,13 +902,12 @@ async function callPatient(patientId) {
 async function logOutcome(btn, patientId) {
   const form = btn.closest('.inline-form');
   const status = form.querySelector('.outcome-status-select').value;
-  const notes = form.querySelector('.outcome-notes').value;
   const loggedBy = form.querySelector('.outcome-logged-by').value;
   if (!status) { alert('Please select an outcome'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ call_id: patientId, outcome_status: status, outcome_notes: notes, outcome_logged_by: loggedBy || 'staff', followup_required: false })
+    body: JSON.stringify({ call_id: patientId, outcome_status: status, outcome_notes: null, outcome_logged_by: loggedBy || 'staff', followup_required: false })
   });
   if (res.ok) { alert('✅ Outcome logged'); form.classList.remove('open'); loadPatients(); }
   else alert('❌ Failed to log outcome');
@@ -812,7 +923,7 @@ async function editPatient(btn, patientId) {
     next_call_date: form.querySelector('.edit-next-call').value || null
   };
   if (!updates.condition || !updates.physician_name) { alert('Please fill in all required fields'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates })
   });
@@ -825,7 +936,7 @@ async function deletePatient(btn, patientId) {
   const form = btn.closest('.inline-form');
   const confirmId = form.querySelector('.delete-confirm-input').value.trim();
   if (!confirmId) { alert('Please type the patient ID to confirm'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'delete', patient_id: patientId, confirm_id: confirmId })
   });
@@ -838,13 +949,13 @@ async function deletePatient(btn, patientId) {
 
 // ─── CCM SCHEDULE ───
 async function updateCcmDate(patientId, newDate) {
-  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { next_call_date: newDate } })
   });
 }
 async function updateCcmTime(patientId, newTime) {
-  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { preferred_call_time: newTime } })
   });
@@ -856,12 +967,12 @@ async function scheduleAvc(patientId, currentCcmDate, btn) {
   const callDate = new Date(today.setDate(today.getDate() + 2)).toISOString().split('T')[0];
   if (currentCcmDate && currentCcmDate === callDate) {
     const d = new Date(callDate); d.setDate(d.getDate() + 1);
-    await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+    await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { next_call_date: d.toISOString().split('T')[0] } })
     });
   }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_scheduled: true, avc_next_call_date: callDate } })
   });
@@ -869,19 +980,19 @@ async function scheduleAvc(patientId, currentCcmDate, btn) {
   else alert('❌ Failed to schedule After Visit Call');
 }
 async function updateAvcDate(patientId, newDate) {
-  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_next_call_date: newDate } })
   });
 }
 async function updateAvcTime(patientId, newTime) {
-  await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_preferred_call_time: newTime } })
   });
 }
 async function cancelAvc(patientId) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/manage-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'edit', patient_id: patientId, updates: { avc_scheduled: false, avc_next_call_date: null, avc_preferred_call_time: null } })
   });
@@ -891,7 +1002,7 @@ async function cancelAvc(patientId) {
 async function markAvcReviewed(patientId) {
   const patient = allPatients.find(p => p.patient_id === patientId);
   if (!patient || !patient.latest_avc_call_id) { alert('❌ Could not find AVC call'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/log-outcome`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ call_id: patient.latest_avc_call_id, outcome_status: 'reviewed', outcome_notes: 'AVC summary reviewed by staff', outcome_logged_by: 'staff', followup_required: false })
   });
@@ -926,7 +1037,7 @@ async function selectHistoryPatient(patientId) {
   document.getElementById('callDetailContainer').innerHTML = '<div class="no-selection">← Select a call</div>';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-patient-calls?patient_id=${patientId}`);
+    const res = await apiFetch(`${SUPABASE_URL}/functions/v1/get-patient-calls?patient_id=${patientId}`);
     const calls = await res.json();
     historyAllCalls = calls;
     filteredCalls = calls;
@@ -966,7 +1077,7 @@ function renderCallList(calls) {
           <span style="color:var(--text-tertiary);font-size:10px">${duration}</span>
         </div>
       </div>
-      <div class="call-list-summary">${call.call_summary || 'No summary'}</div>
+      <div class="call-list-summary">${call.call_summary || 'Not stored in Bridge Mode'}</div>
     </div>`;
   }).join('');
 }
@@ -1027,7 +1138,7 @@ function selectCall(callId) {
 
     <div class="detail-section">
       <div class="detail-section-title">Summary</div>
-      <div class="summary-box">${call.call_summary || call.avc_call_summary || 'No summary available'}</div>
+      <div class="summary-box">${call.call_summary || call.avc_call_summary || 'Summary not stored in Bridge Mode'}</div>
     </div>
 
     <div class="detail-section">
@@ -1051,7 +1162,7 @@ function selectCall(callId) {
          expected, not a bug. Supabase no longer stores the transcript. -->
     <div class="detail-section">
       <div class="detail-section-title">Full Transcript</div>
-      <div class="transcript-box">${call.call_transcript || 'No transcript available'}</div>
+      <div class="transcript-box">${call.call_transcript || 'Transcripts are not stored in Bridge Mode'}</div>
     </div>
   </div>`;
 }
@@ -1091,7 +1202,7 @@ async function addSinglePatient() {
   const physicianEmail = document.getElementById('physicianEmail').value.trim();
   const callDate = document.getElementById('firstCallDate').value;
   if (!condition||!physician) { alert('Please fill in all required fields'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'single', condition, physician_name: physician, physician_email: physicianEmail||null, next_call_date: callDate||null })
   });
@@ -1130,7 +1241,7 @@ function handleCSVUpload(event) {
 
 async function uploadCSV() {
   if (!csvPatients.length) { alert('No patients to import'); return; }
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
+  const res = await apiFetch(`${SUPABASE_URL}/functions/v1/add-patient`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 'bulk', patients: csvPatients })
   });
@@ -1148,7 +1259,7 @@ async function uploadCSV() {
   if (!container) return;
   container.innerHTML = '<span style="font-size:11px;color:var(--text-tertiary)">Loading recording…</span>';
   try {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-recording-url?call_id=${callId}`);
+    const res = await apiFetch(`${SUPABASE_URL}/functions/v1/get-recording-url?call_id=${callId}`);
     const data = await res.json();
     if (data.url) {
       container.innerHTML = `<audio controls style="width:100%;margin-top:4px" src="${data.url}"></audio>`;
@@ -1161,7 +1272,8 @@ async function uploadCSV() {
 }
 
 // ─── INIT ───
-loadPatients();
+loadSession();
+if (authSession) { startApp(); } else { showLogin(''); }
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js');
